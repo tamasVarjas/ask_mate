@@ -14,9 +14,9 @@ def timestamp_to_datetime(database):
 @database_common.connection_handler
 def get_all_data(cursor, data_table):
     cursor.execute("""
-                    SELECT submission_time FROM """ + data_table + """;
+                    SELECT * FROM """ + data_table + """;
                     """,
-                    {'data_table': data_table})
+                   {'data_table': data_table})
     all_data = cursor.fetchall()
     return all_data
 
@@ -36,6 +36,7 @@ def delete_question(cursor, question_id):
     questions = cursor.fetchall()
     return questions
 
+
 @database_common.connection_handler
 def delete_answer(cursor, answer_id):
     cursor.execute("""
@@ -43,7 +44,7 @@ def delete_answer(cursor, answer_id):
                     WHERE id = %(answer_id)s;
                     SELECT * FROM answer;
                     """,
-                    {'answer_id': answer_id})
+                   {'answer_id': answer_id})
     answers = cursor.fetchall()
     return answers
 
