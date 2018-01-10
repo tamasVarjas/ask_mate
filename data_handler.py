@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 import time
 import database_common
 
@@ -60,41 +60,8 @@ def get_answers(cursor, question_id):
     return answers
 
 
-def remove_answers_by_question(question_id):
-    answers = connection.get_data_from_file(connection.ANSWER_FILE_PATH)
-    for answer in answers:
-        if answer['question_id'] == str(question_id):
-            answers.remove(answer)
-
-    return answers
-
-
-def make_new_id(database):
-    ids = []
-    for data in database:
-        ids.append(int(data['id']))
-
-    return str(max(ids) + 1)
-
-
-def make_unix_timestamp():
-    return round(time.time())
-
-
-def append_database(database, new_data):
-    new_data['id'] = make_new_id(database)
-    new_data['submission_time'] = make_unix_timestamp()
-    database.append(new_data)
-    return database
-
 
 # TODO: It's not the best that it makes timestamp_to_datetime, but at this moment, this one is working.
-def get_question_by_id(question_id):
-    for data in timestamp_to_datetime(connection.get_data_from_file(connection.QUESTION_FILE_PATH)):
-        if question_id == data['id']:
-            return data
-
-
 def edit_data(database, updated_data, _id):
     for data in database:
         if _id == data['id']:
@@ -111,30 +78,42 @@ def get_answer_by_id(answer_id):
             return answer
 
 
-print(delete_answer(2))
+def make_unix_timestamp():
+    return round(time.time())
 
 
 @database_common.connection_handler
-def get_search_results(cursor, phrase):
+def add_new_question(cursor, title, message, image):
+    date_time = datetime.now()
     cursor.execute("""
-                    SELECT question_id FROM answer
-                    WHERE message LIKE %(search_phrase)s;
+                    INSERT INTO question (submission_time, view_number, vote_number, title, message, image)
+                    VALUES (%(date_time)s, 0, 0, %(title)s, %(message)s, %(image)s); 
                     """,
-                   {'search_phrase': '%' + phrase + '%'})
-    question_id_list = cursor.fetchall()
+                   {'date_time': date_time, 'title': title, 'message': message, 'image': image})
 
+@database_common.connection_handler
+def add_new_answer(cursor, message, image, question_id):
+    date_time = datetime.now()
     cursor.execute("""
-                    SELECT * FROM question
-                    WHERE title LIKE %(search_phrase)s OR message LIKE %(search_phrase)s;
-                   """,
-                   {'search_phrase': '%' + phrase + '%'})
-    if len(question_id_list) >= 1:
-        for question_id in question_id_list:
-            cursor.execute("""
-                                SELECT * FROM question
-                                WHERE id = %(id)s;
-                               """,
-                           {'id': question_id})
-    results = cursor.fetchall()
+                    INSERT INTO answer (submission_time, vote_number, question_id, message, image) 
+                    VALUES (%(date_time)s, 0, %(question_id)s, %(message)s, %(image)s)
+                    """,
+                   {'date_time': date_time, 'question_id': question_id, 'message': message, 'image': image})
 
-    return results
+@database_common.connection_handler
+def update_question(cursor, question_id, title, message, image):
+    cursor.execute("""
+                    UPDATE question
+                    SET title = %(title)s,
+                        message = %(message)s,
+                        image = %(image)s
+                    WHERE id = %(question_id)s;
+                    """,
+                   {'title': title, 'message': message, 'image': image, 'question_id': question_id})
+
+@database_common.connection_handler
+def update_answer(cursor, message, image):
+    pass
+
+update_question(4, 'Cím', 'Kabbe!', 'valami kép')
+add_new_answer('Valami üzenet', 'valami kép', 3)
