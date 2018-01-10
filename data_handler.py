@@ -209,3 +209,33 @@ def delete_line(cursor, edit_id):
                     """,
                     {'edit_id': edit_id})
 
+@database_common.connection_handler
+def get_all_comments_answer(cursor, answer_id):
+    header = ['id', 'message', 'submission_time']
+    cursor.execute("""
+                    SELECT * FROM comment
+                    WHERE answer_id = %(answer_id)s;
+                    """,
+                   {'answer_id': answer_id})
+    comments = cursor.fetchall()
+    rows = [
+        [1, ]
+    ]
+
+    for dict_row in comments:
+        rows.append([])
+        for column_name in header:
+            rows[len(rows) - 1].append(dict_row[column_name])
+    print(rows)
+    return rows
+
+@database_common.connection_handler
+def add_new_comment_answer(cursor, message, answer_id):
+    date_time = datetime.now()
+    cursor.execute("""
+                    INSERT INTO comment (submission_time, message, answer_id) 
+                    VALUES (%(date_time)s, %(message)s, %(answer_id)s)
+                    """,
+                   {'date_time': date_time, 'message': message, 'answer_id': answer_id})
+
+

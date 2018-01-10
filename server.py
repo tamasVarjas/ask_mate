@@ -117,7 +117,17 @@ def comment(name):
         comments=data_handler.get_all_comments(name)
         return render_template("comment.html", name=name, comments=comments)
 
-        #return redirect(url_for('counter_plus', name=name))
+@app.route('/comment_answer/<int:name>', methods=["GET", "POST"])
+def comment_answer(name):
+    if request.method == 'GET':
+        comments=data_handler.get_all_comments_answer(name)
+        return render_template("comment_answer.html", name=name, comments=comments)
+    else:
+        comment_answer = request.form["comment"]
+        data_handler.add_new_comment_answer(comment_answer, name)
+        comments=data_handler.get_all_comments_answer(name)
+        return render_template("comment_answer.html", name=name, comments=comments)
+
 
 
 @app.route('/search?q=<search_phrase>')
@@ -131,6 +141,13 @@ def delete_comment(name, question_id):
     comments = data_handler.get_all_comments(name)
     print(comments)
     return render_template('comment.html', name=name, comments=comments)
+
+
+@app.route('/delete_comment_answer/<int:name>/<int:question_id>')
+def delete_comment_answer(name, question_id):
+    data_handler.delete_line(question_id)
+    comments = data_handler.get_all_comments_answer(name)
+    return render_template('comment_answer.html', name=name, comments=comments)
 
 
 if __name__ == '__main__':
