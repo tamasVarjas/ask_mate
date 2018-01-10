@@ -1,129 +1,111 @@
-import csv
-def get_all_user_story():
-    with open("questions.csv", 'r') as file:
-        csv_file = csv.reader(file)
-        table = [item for item in csv_file]
-    return table
+import datetime
+import time
+import database_common
 
 
-def get_all_answer_story():
-    with open("answers.csv", 'r') as file:
-        answer_csv = csv.reader(file)
-        answer_table = [item for item in answer_csv]
-    return answer_table
+def timestamp_to_datetime(database):
+    for data in database:
+        data['submission_time'] = datetime.datetime.fromtimestamp(int(data['submission_time'])).strftime(
+            '%Y-%m-%d %H:%M:%S')
+
+    return database
 
 
-def get_answers_by_question_id(id):
-    table = get_all_answer_story()
-    answers_for_question = []
-    for answers in table:
-        if answers[0] == str(id):
-            answers_for_question.append(answers)
-    return answers_for_question
+@database_common.connection_handler
+def get_all_data(cursor, data_table):
+    cursor.execute("""
+                    SELECT * FROM """ + data_table + """;
+                    """,
+                    {'data_table': data_table})
+    all_data = cursor.fetchall()
+    return all_data
 
 
-def save_routine(table):
-    with open("questions.csv", 'a') as file:
-        csv_file = csv.writer(file)
-        csv_file.writerow(table)
-    return table
+@database_common.connection_handler
+def delete_question(cursor, question_id):
+    cursor.execute("""
+                    DELETE FROM question_tag
+                    WHERE question_id = %(question_id)s;
+                    DELETE FROM answer
+                    WHERE question_id = %(question_id)s;
+                    DELETE FROM question
+                    WHERE id = %(question_id)s;
+                    SELECT * FROM question;
+                    """,
+                   {'question_id': question_id})
+    questions = cursor.fetchall()
+    return questions
+
+@database_common.connection_handler
+def delete_answer(cursor, answer_id):
+    cursor.execute("""
+                    DELETE FROM answer
+                    WHERE id = %(answer_id)s;
+                    SELECT * FROM answer;
+                    """,
+                    {'answer_id': answer_id})
+    answers = cursor.fetchall()
+    return answers
 
 
-def generate_id():
-    ids = get_ids()
-    if len(ids) == 0:
-        return 1
-    else:
-        return max(ids) + 1
+@database_common.connection_handler
+def get_answers(cursor, question_id):
+    cursor.execute("""
+                    SELECT * FROM answer
+                    WHERE question_id = %(question_id)s;
+                    """,
+                   {'question_id': question_id})
+    answers = cursor.fetchall()
+    return answers
+
+def remove_answers_by_question(question_id):
+    answers = connection.get_data_from_file(connection.ANSWER_FILE_PATH)
+    for answer in answers:
+        if answer['question_id'] == str(question_id):
+            answers.remove(answer)
+
+    return answers
 
 
-def get_ids():
-    table = get_all_user_story()
+def make_new_id(database):
     ids = []
-    for rows in table:
-        ids.append(int(rows[0]))
-    return int(ids[-1])+1
+    for data in database:
+        ids.append(int(data['id']))
+
+    return str(max(ids) + 1)
 
 
-def update_csv_info(newdata,name):
-    table = get_all_user_story()
-    for row in table:
-        row_number = table.index(row)
-        if int(row[0]) == int(name):
-            table[row_number][3] = str(newdata)
-            return view_number(table)
+def make_unix_timestamp():
+    return round(time.time())
 
 
-def view_number(counter_num):
-    with open("questions.csv", 'w') as file:
-        csv_file = csv.writer(file, delimiter=',', quotechar='\"')
-        for row in counter_num:
-            csv_file.writerow(row)
+def append_database(database, new_data):
+    new_data['id'] = make_new_id(database)
+    new_data['submission_time'] = make_unix_timestamp()
+    database.append(new_data)
+    return database
 
 
-def update_csv_info_pop(newdata,name):
-    table = get_all_user_story()
-    for row in table:
-        row_number = table.index(row)
-        if int(row[0]) == int(name):
-            table[row_number][4] = str(newdata)
-            return view_number(table)
+# TODO: It's not the best that it makes timestamp_to_datetime, but at this moment, this one is working.
+def get_question_by_id(question_id):
+    for data in timestamp_to_datetime(connection.get_data_from_file(connection.QUESTION_FILE_PATH)):
+        if question_id == data['id']:
+            return data
 
 
-def get_answers_by_question_id(id):
-    table = get_all_answer_story()
-    answers_for_question = []
-    for answers in table:
-        if answers[0] == str(id):
-            answers_for_question.append(answers)
-    return answers_for_question
+def edit_data(database, updated_data, _id):
+    for data in database:
+        if _id == data['id']:
+            for element in updated_data:
+                data[element] = updated_data[element]
+
+    return database
 
 
-def get_all_answer_story():
-    with open("answers.csv", 'r') as file:
-        answer_csv = csv.reader(file)
-        answer_table = [item for item in answer_csv]
-    return answer_table
+def get_answer_by_id(answer_id):
+    answers = connection.get_data_from_file(connection.ANSWER_FILE_PATH)
+    for answer in answers:
+        if answer['id'] == answer_id:
+            return answer
 
-
-def save_routine_to_answer(table):
-    with open("answers.csv", 'a') as file:
-        csv_file = csv.writer(file)
-        csv_file.writerow(table)
-    return table
-
-
-def get_ids_ans():
-    table = get_all_answer_story()
-    ids = []
-    for rows in table:
-        ids.append(int(rows[1]))
-    return int(ids[-1])+1
-
-
-def update_csv_answer_pop(newdata, name, question_id):
-    table = get_all_answer_story()
-    for row in table:
-        row_number = table.index(row)
-        if int(row[0]) == int(name) and int(row[1]) == int(question_id):
-            table[row_number][3] = str(newdata)
-            return view_number_answer(table)
-
-
-def view_number_answer(counter_num):
-    with open("answers.csv", 'w') as file:
-        csv_file = csv.writer(file, delimiter=',', quotechar='\"')
-        for row in counter_num:
-            csv_file.writerow(row)
-
-
-def get_selected_answers_by_question_id(id, id_2):
-    table = get_all_answer_story()
-    answer_for_the_question = []
-    for answers in table:
-        if answers[0] == str(id) and answers[1] == str(id_2):
-            answer_for_the_question.append(answers)
-    print(answer_for_the_question)
-    return answer_for_the_question
-
-
+print(delete_answer(2))
