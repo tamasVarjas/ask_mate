@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome Traveler!</title>
+    <style>
+        table, th, td {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body align="center">
+<table align="center">
+    <tr style="color:darkred">
+        <th>Index</th>
+        <th>Question</th>
+        <th>View Numbers</th>
+        <th>Popularity</th>
+    </tr>
+    {% for question in results %}
+    <tr>
+        <td>{{ question['id'] }}</td>
+        <td>{{ question['title'] }}</td>
+        <td>{{ question['view_number'] }}</td>
+        <td>{{ question['vote_number] }}</td>
+    </tr>
+    {% endfor %}
+</table>
+</body>
+</html>
