@@ -10,11 +10,12 @@
 <img src="{{picture_data}}" height="405px" alt=""><br/>
 <table align="center" height="100px" width="340px" border="1">
   <tr>
-      <td colspan="2" align="justify"><strong>Question details:</strong> {{detail_data}}</td>
+      <td colspan="3" align="justify"><strong>Question details:</strong> {{detail_data}}</td>
   </tr>
   <tr>
     <td>View number: {{ view_number }}</td>
     <td>Popularity:  {{ popular_number }}</td>
+    <td><form method="get" action="/comment/{{ name }}"> <button type="submit">Comment</button></form></td>
   </tr>
 </table><br/>
 <p>

@@ -42,9 +42,9 @@ def counter_plus(name):
 
 @app.route('/like/<int:name>', methods=["GET"])
 def popularity(name):
-    info = data_handler.get_all_user_story()
-    popular_number = int(info[name - 1][4])
-    view_number = int(info[name - 1][3])
+    question = data_handler.get_question_by_id(name)
+    popular_number = question[0]['vote_number']
+    view_number = question[0]['view_number']
     if request.method == 'GET':
         popular_number += 1
         view_number -= 1
@@ -103,12 +103,22 @@ def answer_edit(name, question_id):
     if request.method == 'GET':
         edit_selected = data_handler.get_selected_answers_by_question_id(name, question_id)
         return render_template("answer_edit.html", selected_answer=edit_selected)
+    # else:
+    # new_answer=request.form['edit_answer']
+    # !!!!! data_handler.change_answer(name, question_id, new_answer)
+    # return redirect (url_for('/question/<int:name>'))
+
+
+@app.route('/comment/<int:name>', methods=["GET", "POST"])
+def comment(name):
+    if request.method == 'GET':
+        return render_template("comment.html")
     else:
-        new_answer = request.form['new_answer']
-        data_handler.change_answer(edit_id, new_number)
-        applicants = data_manager.get_all_applicants()
-        return render_template("/applicant_with_all_data", applicants=applicants)
-    return render_template("answer_edit.html")
+        comment = request.form["comment"]
+        id = data_handler.get_ids()
+        story_elements = [id, question_id, comment]
+        data_handler.save_comment(story_elements)
+        return redirect("/question/<int:name>")
 
 
 @app.route('/search?q=<search_phrase>')
