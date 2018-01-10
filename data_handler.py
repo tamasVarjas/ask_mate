@@ -60,7 +60,6 @@ def get_answers(cursor, question_id):
     return answers
 
 
-
 # TODO: It's not the best that it makes timestamp_to_datetime, but at this moment, this one is working.
 def edit_data(database, updated_data, _id):
     for data in database:
@@ -69,13 +68,6 @@ def edit_data(database, updated_data, _id):
                 data[element] = updated_data[element]
 
     return database
-
-
-def get_answer_by_id(answer_id):
-    answers = connection.get_data_from_file(connection.ANSWER_FILE_PATH)
-    for answer in answers:
-        if answer['id'] == answer_id:
-            return answer
 
 
 def make_unix_timestamp():
@@ -91,6 +83,7 @@ def add_new_question(cursor, title, message, image):
                     """,
                    {'date_time': date_time, 'title': title, 'message': message, 'image': image})
 
+
 @database_common.connection_handler
 def add_new_answer(cursor, message, image, question_id):
     date_time = datetime.now()
@@ -99,6 +92,7 @@ def add_new_answer(cursor, message, image, question_id):
                     VALUES (%(date_time)s, 0, %(question_id)s, %(message)s, %(image)s)
                     """,
                    {'date_time': date_time, 'question_id': question_id, 'message': message, 'image': image})
+
 
 @database_common.connection_handler
 def update_question(cursor, question_id, title, message, image):
@@ -111,9 +105,60 @@ def update_question(cursor, question_id, title, message, image):
                     """,
                    {'title': title, 'message': message, 'image': image, 'question_id': question_id})
 
+
 @database_common.connection_handler
 def update_answer(cursor, message, image):
     pass
 
-update_question(4, 'Cím', 'Kabbe!', 'valami kép')
-add_new_answer('Valami üzenet', 'valami kép', 3)
+
+@database_common.connection_handler
+def get_question_by_id(cursor, question_id):
+    cursor.execute("""
+                    SELECT * FROM question
+                    WHERE id = %(question_id)s;
+                    """,
+                   {'question_id': question_id})
+    question = cursor.fetchall()
+    return question
+
+
+@database_common.connection_handler
+def get_answers_by_question_id(cursor, name):
+    cursor.execute("""
+                    SELECT * FROM answer
+                    WHERE id = %(question_id)s;
+                    """,
+                   {'question_id': name})
+    answer_to_question = cursor.fetchall()
+    return answer_to_question
+
+
+@database_common.connection_handler
+def update_view_number(cursor, view_number, name):
+    cursor.execute("""
+                    UPDATE question
+                    SET view_number = %(view_number)s
+                    WHERE id = %(question_id)s;
+                    """,
+                   {'question_id': name, 'view_number': view_number})
+
+
+@database_common.connection_handler
+def get_answer_by_id(cursor, answer_id):
+    cursor.execute("""
+                    SELECT * from answer
+                    WHERE id = %(answer_id)s;
+                    """,
+                   {'answer_id': answer_id})
+    answer = cursor.fetchall()
+    return answer
+
+
+@database_common.connection_handler
+def update_answer_vote_number(cursor, answer_id, vote_number):
+    cursor.execute("""
+                    UPDATE answer
+                    SET vote_number = %(vote_number)s
+                    WHERE id = %(answer_id)s;
+                    """,
+                   {'answer_id': answer_id, 'vote_number': vote_number})

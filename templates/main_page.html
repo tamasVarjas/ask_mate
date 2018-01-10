@@ -15,20 +15,20 @@ table, th, td {
     <img src="https://img00.deviantart.net/820a/i/2016/109/5/4/marvel_cinematic_universe_2_0_by_tymann930-d9zjipk.png" height="405px" alt=""/>
 <table align="center">
   <tr style="color:darkred">
-    <th  >Index</th>
+    <th>Index</th>
     <th>Question</th>
     <th>View Numbers</th>
     <th>Popularity</th>
   </tr>
+  {% for question_detail in info %}
   <tr>
-    {% for question_detail in info %}
-    <td>{{ question_detail[0] }}</td>
-    <td>{{ question_detail[1] }}</td>
-    <td>{{ question_detail[3] }}</td>
-    <td>{{ question_detail[4] }}</td>
-    <td><form method="get" action="/question/{{ question_detail[0] }}"><button type="submit">✓</button></form>
+    <td>{{ question_detail['id'] }}</td>
+    <td>{{ question_detail['title'] }}</td>
+    <td>{{ question_detail['view_number'] }}</td>
+    <td>{{ question_detail['vote_number'] }}</td>
+    <td><form method="get" action="/question/{{ question_detail['id'] }}"><button type="submit">✓</button></form>
   </tr>
-    {% endfor %}
+  {% endfor %}
 </table>
 <br/>
 <form method="get" action="/question/add_new_question"> <button type="submit">Ask something clever!</button> </form>

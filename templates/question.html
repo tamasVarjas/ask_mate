@@ -5,7 +5,7 @@
     <title>Question</title>
 </head>
 <body align="center">
-<h3 align="left">Your choosen question:</h3><br/>
+<h3 align="left">Your chosen question:</h3><br/>
 <h1>{{question_data}}</h1><br/>
 <img src="{{picture_data}}" height="405px" alt=""><br/>
 <table align="center" height="100px" width="340px" border="1">
@@ -29,18 +29,18 @@
   <tr bgcolor="black" style="color:white">
     <th>ID</th>
     <th >Answer:</th>
-      <th colspan="2">Vote:</th>
-      <th>Truth:</th>
-      <th></th>
+    <th colspan="2">Vote:</th>
+    <th>Truth:</th>
+    <th></th>
   </tr>
+  {% for answer in answers %}
   <tr>
-    {% for answer in answers %}
-    <td bgcolor="black" style="color:white"># {{ answer [1] }}</td>
-    <td align="justify">{{ answer [2] }}</td>
-    <td><a href="/answer_like/{{ name }}/{{ answer[1] }}"><img border="0" alt="Like" src="https://imageog.flaticon.com/icons/png/512/60/60993.png?size=1200x630f&pad=10,10,10,10&ext=png&bg=FFFFFFFF" height="25"></td>
-    <td><a href="/answer_dislike/{{ name }}/{{ answer[1] }}"><img border="0" alt="Hate" src="http://cliparting.com/wp-content/uploads/2016/11/Heart-black-and-white-broken-heart-clipart-black-and-white-free-image.png" height="20"></a><br/></td>
-    <td>{{ answer [3] }}</td>
-    <td><form method="get" action="/answer_edit/{{ name }}/{{ answer[1] }}"><button type="submit">Edit</button></form></td>
+    <td bgcolor="black" style="color:white"># {{ answer ['id'] }}</td>
+    <td align="justify">{{ answer ['message'] }}</td>
+    <td><a href="/answer_like/{{ name }}/{{ answer['id'] }}"><img border="0" alt="Like" src="https://imageog.flaticon.com/icons/png/512/60/60993.png?size=1200x630f&pad=10,10,10,10&ext=png&bg=FFFFFFFF" height="25"></td>
+    <td><a href="/answer_dislike/{{ name }}/{{ answer['id'] }}"><img border="0" alt="Hate" src="http://cliparting.com/wp-content/uploads/2016/11/Heart-black-and-white-broken-heart-clipart-black-and-white-free-image.png" height="20"></a><br/></td>
+    <td>{{ answer ['vote_number'] }}</td>
+    <td><form method="get" action="/answer_edit/{{ name }}/{{ answer['id'] }}"><button type="submit">Edit</button></form></td>
   </tr>
     {% endfor %}
 </table><br/>
