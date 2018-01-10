@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome Traveler!</title>
+<style>
+table, th, td {
+    border: 1px solid black;
+}
+</style>
+</head>
+<body align="center">
+<h1 style="color:red">Welcome Traveler!</h1>
+    <h2>If you are a nice geek or just simply a comic lover deep in your heart, then you are exactly in the right place. Share your thoughts about any Marvel topic, which you like. Be polite and have fun!</h2>
+    <img src="https://img00.deviantart.net/820a/i/2016/109/5/4/marvel_cinematic_universe_2_0_by_tymann930-d9zjipk.png" height="405px" alt=""/>
+<table align="center">
+  <tr style="color:darkred">
+    <th  >Index</th>
+    <th>Question</th>
+    <th>View Numbers</th>
+    <th>Popularity</th>
+  </tr>
+  <tr>
+    {% for question_detail in info %}
+    <td>{{ question_detail[0] }}</td>
+    <td>{{ question_detail[1] }}</td>
+    <td>{{ question_detail[3] }}</td>
+    <td>{{ question_detail[4] }}</td>
+    <td><form method="get" action="/question/{{ question_detail[0] }}"><button type="submit">✓</button></form>
+  </tr>
+    {% endfor %}
+</table>
+<br/>
+<form method="get" action="/question/add_new_question"> <button type="submit">Ask something clever!</button> </form>
+</body>
+</html>

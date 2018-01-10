@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Question time</title>
+</head>
+<body>
+<form action="/question/add_new_question", method="POST">
+    <label for="title">Give me your question, pal:</label><br/>
+    <input id="title", name="title" type="text"> <br/>
+    <label for="more_detail">Put here some fancy description about your topic:</label><br/>
+    <textarea id="more_detail", name="more_detail"></textarea><br/>
+    <label>You can put here some picture link:</label><br/>
+    <input id="pic_link", name="pic_link" type="text"> <br/>
+    <button type="submit">Let it out to the world!</button>
+</form>
+</body>
+</html>
