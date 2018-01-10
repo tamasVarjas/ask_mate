@@ -146,7 +146,7 @@ def update_view_number(cursor, view_number, name):
 @database_common.connection_handler
 def get_answer_by_id(cursor, answer_id):
     cursor.execute("""
-                    SELECT * from answer
+                    SELECT * FROM answer
                     WHERE id = %(answer_id)s;
                     """,
                    {'answer_id': answer_id})
@@ -162,3 +162,13 @@ def update_answer_vote_number(cursor, answer_id, vote_number):
                     WHERE id = %(answer_id)s;
                     """,
                    {'answer_id': answer_id, 'vote_number': vote_number})
+
+
+@database_common.connection_handler
+def update_question(cursor, question_id, view_number, vote_number):
+    cursor.execute("""
+                    UPDATE question
+                    SET view_number = %(view_number)s, vote_number = %(vote_number)s
+                    WHERE id = %(question_id)s;
+                    """,
+                   {'question_id': question_id, 'view_number': view_number, 'vote_number': vote_number})

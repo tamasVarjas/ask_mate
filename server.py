@@ -48,21 +48,19 @@ def popularity(name):
     if request.method == 'GET':
         popular_number += 1
         view_number -= 1
-        data_handler.update_csv_info_pop(popular_number, name)
-        data_handler.update_csv_info(view_number, name)
+        data_handler.update_question(name, view_number, popular_number)
     return redirect(url_for('counter_plus', name=name))
 
 
 @app.route('/dislike/<int:name>', methods=["GET"])
 def not_so_popular(name):
-    info = data_handler.get_all_user_story()
-    popular_number = int(info[name - 1][4])
-    view_number = int(info[name - 1][3])
+    question = data_handler.get_question_by_id(name)
+    popular_number = question[0]['vote_number']
+    view_number = question[0]['view_number']
     if request.method == 'GET':
         popular_number += -1
         view_number -= 1
-        data_handler.update_csv_info_pop(popular_number, name)
-        data_handler.update_csv_info(view_number, name)
+        data_handler.update_question(name, view_number, popular_number)
     return redirect(url_for('counter_plus', name=name))
 
 
