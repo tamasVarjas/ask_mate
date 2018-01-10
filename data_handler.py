@@ -16,7 +16,7 @@ def get_all_data(cursor, data_table):
     cursor.execute("""
                     SELECT * FROM """ + data_table + """;
                     """,
-                    {'data_table': data_table})
+                   {'data_table': data_table})
     all_data = cursor.fetchall()
     return all_data
 
@@ -36,6 +36,7 @@ def delete_question(cursor, question_id):
     questions = cursor.fetchall()
     return questions
 
+
 @database_common.connection_handler
 def delete_answer(cursor, answer_id):
     cursor.execute("""
@@ -43,7 +44,7 @@ def delete_answer(cursor, answer_id):
                     WHERE id = %(answer_id)s;
                     SELECT * FROM answer;
                     """,
-                    {'answer_id': answer_id})
+                   {'answer_id': answer_id})
     answers = cursor.fetchall()
     return answers
 
@@ -57,6 +58,7 @@ def get_answers(cursor, question_id):
                    {'question_id': question_id})
     answers = cursor.fetchall()
     return answers
+
 
 def remove_answers_by_question(question_id):
     answers = connection.get_data_from_file(connection.ANSWER_FILE_PATH)
@@ -108,4 +110,31 @@ def get_answer_by_id(answer_id):
         if answer['id'] == answer_id:
             return answer
 
+
 print(delete_answer(2))
+
+
+@database_common.connection_handler
+def get_search_results(cursor, phrase):
+    cursor.execute("""
+                    SELECT question_id FROM answer
+                    WHERE message LIKE %(search_phrase)s;
+                    """,
+                   {'search_phrase': '%' + phrase + '%'})
+    question_id_list = cursor.fetchall()
+
+    cursor.execute("""
+                    SELECT * FROM question
+                    WHERE title LIKE %(search_phrase)s OR message LIKE %(search_phrase)s;
+                   """,
+                   {'search_phrase': '%' + phrase + '%'})
+    if len(question_id_list) >= 1:
+        for question_id in question_id_list:
+            cursor.execute("""
+                                SELECT * FROM question
+                                WHERE id = %(id)s;
+                               """,
+                           {'id': question_id})
+    results = cursor.fetchall()
+
+    return results
