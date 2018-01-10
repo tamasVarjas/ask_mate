@@ -172,3 +172,40 @@ def update_question(cursor, question_id, view_number, vote_number):
                     WHERE id = %(question_id)s;
                     """,
                    {'question_id': question_id, 'view_number': view_number, 'vote_number': vote_number})
+
+@database_common.connection_handler
+def add_new_comment(cursor, message, question_id):
+    date_time = datetime.now()
+    cursor.execute("""
+                    INSERT INTO comment (submission_time, message, question_id) 
+                    VALUES (%(date_time)s, %(message)s, %(question_id)s)
+                    """,
+                   {'date_time': date_time, 'message': message, 'question_id': question_id})
+
+@database_common.connection_handler
+def get_all_comments(cursor, question_id):
+    header = ['id', 'message', 'submission_time']
+    cursor.execute("""
+                    SELECT * FROM comment
+                    WHERE question_id = %(question_id)s;
+                    """,
+                   {'question_id': question_id})
+    comments = cursor.fetchall()
+    rows = [
+        [1, ]
+    ]
+
+    for dict_row in comments:
+        rows.append([])
+        for column_name in header:
+            rows[len(rows) - 1].append(dict_row[column_name])
+    return rows
+
+@database_common.connection_handler
+def delete_line(cursor, edit_id):
+    cursor.execute("""
+                    DELETE from comment 
+                    WHERE id = %(edit_id)s;
+                    """,
+                    {'edit_id': edit_id})
+

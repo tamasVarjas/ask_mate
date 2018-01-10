@@ -92,8 +92,7 @@ def answer_popularity(name, question_id):
     if request.method == 'GET':
         answer_popular_number -= 1
         data_handler.update_answer_vote_number(name, answer_popular_number)
-    return redirect(
-        url_for('counter_plus', answer_popular_number=answer_popular_number, name=name, question_id=question_id))
+    return redirect(url_for('counter_plus', answer_popular_number=answer_popular_number, name=name, question_id=question_id))
 
 
 @app.route('/answer_edit/<int:name>/<int:question_id>', methods=["GET", "POST"])
@@ -110,20 +109,28 @@ def answer_edit(name, question_id):
 @app.route('/comment/<int:name>', methods=["GET", "POST"])
 def comment(name):
     if request.method == 'GET':
-        return render_template("comment.html")
+        comments=data_handler.get_all_comments(name)
+        return render_template("comment.html", name=name, comments=comments)
     else:
         comment = request.form["comment"]
-        id = data_handler.get_ids()
-        story_elements = [id, question_id, comment]
-        data_handler.save_comment(story_elements)
-        return redirect("/question/<int:name>")
+        data_handler.add_new_comment(comment, name)
+        comments=data_handler.get_all_comments(name)
+        return render_template("comment.html", name=name, comments=comments)
+
+        #return redirect(url_for('counter_plus', name=name))
 
 
 @app.route('/search?q=<search_phrase>')
 def show_search_results(search_phrase):
     results = data_handler.get_search_results(search_phrase)
-
     return render_template('search_results.html', results=results)
+
+@app.route('/delete_comment/<int:name>/<int:question_id>')
+def delete_comment(name, question_id):
+    data_handler.delete_line(question_id)
+    comments = data_handler.get_all_comments(name)
+    print(comments)
+    return render_template('comment.html', name=name, comments=comments)
 
 
 if __name__ == '__main__':
