@@ -14,8 +14,9 @@ def timestamp_to_datetime(database):
 @database_common.connection_handler
 def get_all_data(cursor, data_table):
     cursor.execute("""
-                    SELECT * FROM """ + data_table + """;
-                    """,
+                    SELECT * FROM """ + data_table + """
+                    ORDER BY id;
+                   """,
                    {'data_table': data_table})
     all_data = cursor.fetchall()
     return all_data
@@ -77,21 +78,28 @@ def make_unix_timestamp():
 @database_common.connection_handler
 def add_new_question(cursor, title, message, image):
     date_time = datetime.now()
-    cursor.execute("""
-                    INSERT INTO question (submission_time, view_number, vote_number, title, message, image)
-                    VALUES (%(date_time)s, 0, 0, %(title)s, %(message)s, %(image)s); 
-                    """,
-                   {'date_time': date_time, 'title': title, 'message': message, 'image': image})
+    if image != '':
+        cursor.execute("""
+                        INSERT INTO question (submission_time, view_number, vote_number, title, message, image)
+                        VALUES (%(date_time)s, 0, 0, %(title)s, %(message)s, %(image)s); 
+                        """,
+                       {'date_time': date_time, 'title': title, 'message': message, 'image': image})
+    else:
+        cursor.execute("""
+                        INSERT INTO question (submission_time, view_number, vote_number, title, message)
+                        VALUES (%(date_time)s, 0, 0, %(title)s, %(message)s); 
+                        """,
+                       {'date_time': date_time, 'title': title, 'message': message})
 
 
 @database_common.connection_handler
-def add_new_answer(cursor, message, image, question_id):
+def add_new_answer(cursor, message, question_id):
     date_time = datetime.now()
     cursor.execute("""
-                    INSERT INTO answer (submission_time, vote_number, question_id, message, image) 
-                    VALUES (%(date_time)s, 0, %(question_id)s, %(message)s, %(image)s)
+                    INSERT INTO answer (submission_time, vote_number, question_id, message) 
+                    VALUES (%(date_time)s, 0, %(question_id)s, %(message)s)
                     """,
-                   {'date_time': date_time, 'question_id': question_id, 'message': message, 'image': image})
+                   {'date_time': date_time, 'question_id': question_id, 'message': message})
 
 
 @database_common.connection_handler
@@ -133,7 +141,7 @@ def get_question_by_id(cursor, question_id):
 def get_answers_by_question_id(cursor, name):
     cursor.execute("""
                     SELECT * FROM answer
-                    WHERE id = %(question_id)s;
+                    WHERE question_id = %(question_id)s;
                     """,
                    {'question_id': name})
     answer_to_question = cursor.fetchall()
@@ -180,6 +188,7 @@ def update_question(cursor, question_id, view_number, vote_number):
                     """,
                    {'question_id': question_id, 'view_number': view_number, 'vote_number': vote_number})
 
+
 @database_common.connection_handler
 def add_new_comment(cursor, message, question_id):
     date_time = datetime.now()
@@ -188,6 +197,7 @@ def add_new_comment(cursor, message, question_id):
                     VALUES (%(date_time)s, %(message)s, %(question_id)s)
                     """,
                    {'date_time': date_time, 'message': message, 'question_id': question_id})
+
 
 @database_common.connection_handler
 def get_all_comments(cursor, question_id):
@@ -208,13 +218,15 @@ def get_all_comments(cursor, question_id):
             rows[len(rows) - 1].append(dict_row[column_name])
     return rows
 
+
 @database_common.connection_handler
 def delete_line(cursor, edit_id):
     cursor.execute("""
                     DELETE from comment 
                     WHERE id = %(edit_id)s;
                     """,
-                    {'edit_id': edit_id})
+                   {'edit_id': edit_id})
+
 
 @database_common.connection_handler
 def get_all_comments_answer(cursor, answer_id):
@@ -236,6 +248,7 @@ def get_all_comments_answer(cursor, answer_id):
     print(rows)
     return rows
 
+
 @database_common.connection_handler
 def add_new_comment_answer(cursor, message, answer_id):
     date_time = datetime.now()
@@ -246,17 +259,52 @@ def add_new_comment_answer(cursor, message, answer_id):
                    {'date_time': date_time, 'message': message, 'answer_id': answer_id})
 
 
-#@app.route('/edit_comment_answer/<int:edit_id>', methods=['GET', 'POST'])
-#def edit_comment_answer(edit_id):
-    #if request.method=='GET':
-        #edit_selected_answer = data_handler.selected_comment_answer_to_edit(edit_id)
-        #return render_template("/edit.html", selected_applicant=edit_selected)
-    #else:
-        #new_number=request.form['new_phone']
-        #data_manager.change_phone(edit_id, new_number)
-        #applicants=data_manager.get_all_applicants()
-        #return render_template("/applicant_with_all_data", applicants=applicants)
+@database_common.connection_handler
+def get_tag(cursor, question_id):
+    cursor.execute("""
+                    SELECT tag_id FROM question_tag
+                    WHERE question_id = %(question_id)s;
+                    """,
+                   {'question_id': question_id})
+    tag_id = cursor.fetchone()['tag_id']
+    cursor.execute("""
+                    SELECT name FROM tag
+                    WHERE id = %(tag_id)s;
+                    """,
+                   {'tag_id': tag_id})
+    tag = cursor.fetchone()
+    return tag
 
+
+@database_common.connection_handler
+def add_new_tag(cursor, new_tag):
+    cursor.execute("""
+                    INSERT INTO tag (name)
+                    VALUES (%(new_tag)s);
+                    """,
+                   {'new_tag': new_tag})
+
+
+@database_common.connection_handler
+def get_search_results(cursor, search_phrase):
+    cursor.execute("""
+                    SELECT id, title, view_number, vote_number FROM question
+                    WHERE title LIKE %(search_phrase)s OR message LIKE %(search_phrase)s
+                    ORDER BY id;
+                   """,
+                   {'search_phrase': '%' + search_phrase + '%'})
+    questions = cursor.fetchall()
+
+    return questions
+
+
+@database_common.connection_handler
+def delete_tag(cursor, tag_id):
+    cursor.execute("""
+                    DELETE FROM tag
+                    WHERE id = %(tag_id)s;
+                    """,
+                   {'tag_id': tag_id})
 
 @database_common.connection_handler
 def get_selected_answers_by_question_id(cursor, id, question_id):

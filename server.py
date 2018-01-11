@@ -25,11 +25,13 @@ def add_new_question():
 @app.route('/question/<int:name>', methods=["GET", "POST"])
 def counter_plus(name):
     info = data_handler.get_question_by_id(name)
+    info_tag = data_handler.get_tag(name)
     question_data = info[0]['title']
     detail_data = info[0]['message']
     picture_data = info[0]['image']
     view_number = info[0]['view_number']
     popular_number = info[0]['vote_number']
+    tag = info_tag['name']
     answers = data_handler.get_answers_by_question_id(name)
     if request.method == 'GET':
         view_number += 1
@@ -37,7 +39,7 @@ def counter_plus(name):
         data_handler.update_view_number(view_number, name)
     return render_template("question.html", name=name, question_data=question_data, detail_data=detail_data,
                            picture_data=picture_data, view_number=view_number, popular_number=popular_number,
-                           answers=answers)
+                           tag=tag, answers=answers)
 
 
 @app.route('/like/<int:name>', methods=["GET"])
@@ -67,10 +69,7 @@ def not_so_popular(name):
 @app.route("/question/add_new_answer/<int:name>", methods=['GET', 'POST'])
 def new_question(name):
     answer = request.form["answer"]
-    id_answer = data_handler.get_ids_ans()
-    popularity = 0
-    answer_elements = [name, id_answer, answer, popularity]
-    data_handler.save_routine_to_answer(answer_elements)
+    data_handler.add_new_answer(answer, name)
     return redirect(url_for('counter_plus', name=name))
 
 
@@ -92,7 +91,8 @@ def answer_popularity(name, question_id):
     if request.method == 'GET':
         answer_popular_number -= 1
         data_handler.update_answer_vote_number(name, answer_popular_number)
-    return redirect(url_for('counter_plus', answer_popular_number=answer_popular_number, name=name, question_id=question_id))
+    return redirect(
+        url_for('counter_plus', answer_popular_number=answer_popular_number, name=name, question_id=question_id))
 
 
 @app.route('/answer_edit/<int:name>/<int:question_id>', methods=["GET", "POST"])
@@ -109,31 +109,40 @@ def answer_edit(name, question_id):
 @app.route('/comment/<int:name>', methods=["GET", "POST"])
 def comment(name):
     if request.method == 'GET':
-        comments=data_handler.get_all_comments(name)
+        comments = data_handler.get_all_comments(name)
         return render_template("comment.html", name=name, comments=comments)
     else:
         comment = request.form["comment"]
         data_handler.add_new_comment(comment, name)
-        comments=data_handler.get_all_comments(name)
+        comments = data_handler.get_all_comments(name)
         return render_template("comment.html", name=name, comments=comments)
+
 
 @app.route('/comment_answer/<int:name>', methods=["GET", "POST"])
 def comment_answer(name):
     if request.method == 'GET':
-        comments=data_handler.get_all_comments_answer(name)
+        comments = data_handler.get_all_comments_answer(name)
         return render_template("comment_answer.html", name=name, comments=comments)
     else:
         comment_answer = request.form["comment"]
         data_handler.add_new_comment_answer(comment_answer, name)
-        comments=data_handler.get_all_comments_answer(name)
+        comments = data_handler.get_all_comments_answer(name)
         return render_template("comment_answer.html", name=name, comments=comments)
 
+
+@app.route('/search_results', methods=['GET', 'POST'])
+def find_search_results():
+    form_data = request.form.to_dict()
+    search_phrase = form_data['search_phrase']
+
+    return redirect(url_for('show_search_results', search_phrase=search_phrase))
 
 
 @app.route('/search?q=<search_phrase>')
 def show_search_results(search_phrase):
     results = data_handler.get_search_results(search_phrase)
     return render_template('search_results.html', results=results)
+
 
 @app.route('/delete_comment/<int:name>/<int:question_id>')
 def delete_comment(name, question_id):
