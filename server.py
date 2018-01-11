@@ -25,11 +25,13 @@ def add_new_question():
 @app.route('/question/<int:name>', methods=["GET", "POST"])
 def counter_plus(name):
     info = data_handler.get_question_by_id(name)
+    info_tag = data_handler.get_tag(name)
     question_data = info[0]['title']
     detail_data = info[0]['message']
     picture_data = info[0]['image']
     view_number = info[0]['view_number']
     popular_number = info[0]['vote_number']
+    tag = info_tag['name']
     answers = data_handler.get_answers_by_question_id(name)
     if request.method == 'GET':
         view_number += 1
@@ -37,7 +39,7 @@ def counter_plus(name):
         data_handler.update_view_number(view_number, name)
     return render_template("question.html", name=name, question_data=question_data, detail_data=detail_data,
                            picture_data=picture_data, view_number=view_number, popular_number=popular_number,
-                           answers=answers)
+                           tag=tag, answers=answers)
 
 
 @app.route('/like/<int:name>', methods=["GET"])
@@ -67,10 +69,7 @@ def not_so_popular(name):
 @app.route("/question/add_new_answer/<int:name>", methods=['GET', 'POST'])
 def new_question(name):
     answer = request.form["answer"]
-    id_answer = data_handler.get_ids_ans()
-    popularity = 0
-    answer_elements = [name, id_answer, answer, popularity]
-    data_handler.save_routine_to_answer(answer_elements)
+    data_handler.add_new_answer(answer, name    )
     return redirect(url_for('counter_plus', name=name))
 
 
