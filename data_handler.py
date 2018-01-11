@@ -78,11 +78,18 @@ def make_unix_timestamp():
 @database_common.connection_handler
 def add_new_question(cursor, title, message, image):
     date_time = datetime.now()
-    cursor.execute("""
-                    INSERT INTO question (submission_time, view_number, vote_number, title, message, image)
-                    VALUES (%(date_time)s, 0, 0, %(title)s, %(message)s, %(image)s); 
-                    """,
-                   {'date_time': date_time, 'title': title, 'message': message, 'image': image})
+    if image != '':
+        cursor.execute("""
+                        INSERT INTO question (submission_time, view_number, vote_number, title, message, image)
+                        VALUES (%(date_time)s, 0, 0, %(title)s, %(message)s, %(image)s); 
+                        """,
+                       {'date_time': date_time, 'title': title, 'message': message, 'image': image})
+    else:
+        cursor.execute("""
+                        INSERT INTO question (submission_time, view_number, vote_number, title, message)
+                        VALUES (%(date_time)s, 0, 0, %(title)s, %(message)s); 
+                        """,
+                       {'date_time': date_time, 'title': title, 'message': message})
 
 
 @database_common.connection_handler
