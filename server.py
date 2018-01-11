@@ -39,7 +39,7 @@ def question_details(question_id):
         view_number += 1
         info[0]['view_number'] = view_number
         data_handler.update_view_number(view_number, question_id)
-    return render_template("question.html", name=question_id, question_data=question_data, detail_data=detail_data,
+    return render_template("question.html", question_id=question_id, question_data=question_data, detail_data=detail_data,
                            picture_data=picture_data, view_number=view_number, popular_number=popular_number,
                            tag=tag, answers=answers)
 
@@ -53,7 +53,7 @@ def popularity(name):
         popular_number += 1
         view_number -= 1
         data_handler.update_question(name, view_number, popular_number)
-    return redirect(url_for('question_details', name=name))
+    return redirect(url_for('question_details', question_id=name))
 
 
 @app.route('/dislike/<int:name>', methods=["GET"])
@@ -65,22 +65,20 @@ def not_so_popular(name):
         popular_number += -1
         view_number -= 1
         data_handler.update_question(name, view_number, popular_number)
-    return redirect(url_for('question_details', name=name))
+    return redirect(url_for('question_details', question_id=name))
 
 
 @app.route("/question/add_new_answer/<int:name>", methods=['GET', 'POST'])
 def new_question(name):
     answer = request.form["answer"]
     data_handler.add_new_answer(answer, name)
-    return redirect(url_for('question_details', name=name))
+    return redirect(url_for('question_details', question_id=name))
 
 
 @app.route('/answer_like/<int:name>/<int:question_id>', methods=["GET", "POST"])
 def answer_less_popularity(name, question_id):
-    answer = data_handler.get_answer_by_id(name)
-    answer_popular_number = answer['vote_number']
     answer = data_handler.get_answer_by_id(question_id)
-    answer_popular_number = answer[0]['vote_number']
+    answer_popular_number = answer['vote_number']
     question = data_handler.get_question_by_id(name)
     view_number = question[0]['view_number']
     popular_number = question[0]['vote_number']
@@ -90,15 +88,13 @@ def answer_less_popularity(name, question_id):
         view_number -= 1
         data_handler.update_question(name, view_number, popular_number)
     return redirect(
-        url_for('question_details', answer_popular_number=answer_popular_number, name=name, question_id=question_id))
+        url_for('question_details', question_id=name))
 
 
 @app.route('/answer_dislike/<int:name>/<int:question_id>', methods=["GET", "POST"])
 def answer_popularity(name, question_id):
-    answer = data_handler.get_answer_by_id(name)
-    answer_popular_number = answer['vote_number']
     answer = data_handler.get_answer_by_id(question_id)
-    answer_popular_number = answer[0]['vote_number']
+    answer_popular_number = answer['vote_number']
     question = data_handler.get_question_by_id(name)
     view_number = question[0]['view_number']
     popular_number = question[0]['vote_number']
@@ -108,7 +104,7 @@ def answer_popularity(name, question_id):
         view_number -= 1
         data_handler.update_question(name, view_number, popular_number)
     return redirect(
-        url_for('question_details', answer_popular_number=answer_popular_number, name=name, question_id=question_id))
+        url_for('question_details', question_id=name))
 
 
 @app.route('/answer_edit/<int:question_id>/<int:answer_id>', methods=["GET", "POST"])
