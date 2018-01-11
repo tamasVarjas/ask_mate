@@ -261,3 +261,11 @@ def add_new_tag(cursor, new_tag):
                     VALUES (%(new_tag)s);
                     """,
                    {'new_tag': new_tag})
+
+@database_common.connection_handler
+def delete_tag(cursor, tag_id):
+    cursor.execute("""
+                    DELETE FROM tag
+                    WHERE id = %(tag_id)s;
+                    """,
+                   {'tag_id': tag_id})
