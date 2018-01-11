@@ -107,8 +107,15 @@ def update_question(cursor, question_id, title, message, image):
 
 
 @database_common.connection_handler
-def update_answer(cursor, message, image):
-    pass
+def update_answer(cursor, name, question_id, message):
+    cursor.execute("""
+                UPDATE answer
+                SET message = %(message)s,
+                WHERE id = %(question_id)s;
+                AND id = %(id);
+                """,
+                   {'id': name, 'question_id': question_id, 'message': message})
+
 
 
 @database_common.connection_handler
@@ -249,4 +256,26 @@ def add_new_comment_answer(cursor, message, answer_id):
         #data_manager.change_phone(edit_id, new_number)
         #applicants=data_manager.get_all_applicants()
         #return render_template("/applicant_with_all_data", applicants=applicants)
+
+
+@database_common.connection_handler
+def get_selected_answers_by_question_id(cursor, id, question_id):
+    header = ['id', 'message']
+    cursor.execute("""
+                    SELECT id, message FROM answer
+                    WHERE question_id = %(question_id)s
+                    AND id = %(id)s;
+                    """,
+                   {'question_id': question_id, 'id': id})
+    rows = cursor.fetchall()
+    answer_rows = [
+        [1, ]
+    ]
+
+    for dict_row in rows:
+        answer_rows.append([])
+        for column_name in header:
+            answer_rows[len(answer_rows) - 1].append(dict_row[column_name])
+    print(answer_rows)
+    return answer_rows
 
