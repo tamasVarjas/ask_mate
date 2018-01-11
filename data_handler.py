@@ -76,7 +76,7 @@ def make_unix_timestamp():
 
 
 @database_common.connection_handler
-def add_new_question(cursor, title, message, image):
+def add_new_question(cursor, title, message, image, tag):
     date_time = datetime.now()
     if image != '':
         cursor.execute("""
@@ -90,7 +90,14 @@ def add_new_question(cursor, title, message, image):
                         VALUES (%(date_time)s, 0, 0, %(title)s, %(message)s); 
                         """,
                        {'date_time': date_time, 'title': title, 'message': message})
-
+    add_new_tag(tag)
+    last_question_id = get_last_question_id()
+    tag_id = get_tag_id_by_tag_name(tag)
+    cursor.execute("""
+                    INSERT INTO question_tag (question_id, tag_id) 
+                    VALUES (%(last_question_id)s, %(tag_id)s);
+                    """,
+                   {'last_question_id': last_question_id['last_value'], 'tag_id': tag_id['id']})
 
 @database_common.connection_handler
 def add_new_answer(cursor, message, question_id):
@@ -305,6 +312,66 @@ def delete_tag(cursor, tag_id):
                     WHERE id = %(tag_id)s;
                     """,
                    {'tag_id': tag_id})
+
+@database_common.connection_handler
+def get_last_question_id(cursor):
+    cursor.execute("""
+                    SELECT last_value FROM question_id_seq;
+                    """)
+    last_question_id = cursor.fetchone()
+    print(last_question_id['last_value'])
+    return last_question_id
+
+@database_common.connection_handler
+def get_last_tag_id(cursor):
+    cursor.execute("""
+                    SELECT last_value FROM tag_id_seq;
+                    """)
+    last_tag_id = cursor.fetchone()
+    return last_tag_id
+
+@database_common.connection_handler
+def get_all_tags(cursor):
+    cursor.execute("""
+                    SELECT name FROM tag;
+                    """)
+    tags = cursor.fetchall()
+    return tags
+
+@database_common.connection_handler
+def get_tag_id_by_tag_name(cursor, tag):
+    cursor.execute("""
+                    SELECT id FROM tag
+                    WHERE name = %(tag)s;
+                    """,
+                   {'tag': tag})
+    tag_id = cursor.fetchone()
+    return tag_id
+
+
+@database_common.connection_handler
+def add_new_tag(cursor, new_tag):
+    cursor.execute("""
+                    SELECT name FROM tag
+                    WHERE name = %(new_tag)s;
+                    """,
+                   {'new_tag': new_tag})
+    tag_exist = cursor.fetchone()
+    if not tag_exist:
+        cursor.execute("""
+                        INSERT INTO tag (name)
+                        VALUES (%(new_tag)s);
+                        """,
+                       {'new_tag': new_tag})
+
+@database_common.connection_handler
+def delete_tag_from_question(cursor, question_id):
+    cursor.execute("""
+                    UPDATE question_tag
+                    SET tag_id = 0
+                    WHERE question_id = %(question_id)s;
+                    """,
+                   {'question_id': question_id})
 
 @database_common.connection_handler
 def get_selected_answers_by_question_id(cursor, id, question_id):

@@ -12,6 +12,12 @@
     <textarea id="message", name="message"></textarea><br/>
     <label>You can put here some picture link:</label><br/>
     <input id="image", name="image" type="text"> <br/>
+    <input list="tags" name="tag">
+    <datalist id="tags">
+        {% for tag in tags %}
+            <option value="{{ tag['name'] }}">
+        {% endfor %}
+    </datalist>
     <button type="submit">Let it out to the world!</button>
 </form>
 </body>
