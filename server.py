@@ -150,5 +150,16 @@ def delete_comment_answer(name, question_id):
     return render_template('comment_answer.html', name=name, comments=comments)
 
 
+@app.route('/answer_edit_comment/<int:name>/<int:question_id>', methods=["GET", "POST"])
+def answer_edit_comment(name, question_id):
+    if request.method == 'GET':
+        edit_selected = data_handler.get_selected_answers_by_question_id(name, question_id)
+        return render_template("answer_edit.html", selected_answer=edit_selected)
+    # else:
+    # new_answer=request.form['edit_answer']
+    # !!!!! data_handler.change_answer(name, question_id, new_answer)
+    # return redirect (url_for('/question/<int:name>'))
+
+
 if __name__ == '__main__':
     app.run(debug=True)
