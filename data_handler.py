@@ -14,8 +14,9 @@ def timestamp_to_datetime(database):
 @database_common.connection_handler
 def get_all_data(cursor, data_table):
     cursor.execute("""
-                    SELECT * FROM """ + data_table + """;
-                    """,
+                    SELECT * FROM """ + data_table + """
+                    ORDER BY id;
+                   """,
                    {'data_table': data_table})
     all_data = cursor.fetchall()
     return all_data
