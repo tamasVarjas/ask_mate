@@ -238,15 +238,18 @@ def add_new_comment_answer(cursor, message, answer_id):
                     """,
                    {'date_time': date_time, 'message': message, 'answer_id': answer_id})
 
-
-#@app.route('/edit_comment_answer/<int:edit_id>', methods=['GET', 'POST'])
-#def edit_comment_answer(edit_id):
-    #if request.method=='GET':
-        #edit_selected_answer = data_handler.selected_comment_answer_to_edit(edit_id)
-        #return render_template("/edit.html", selected_applicant=edit_selected)
-    #else:
-        #new_number=request.form['new_phone']
-        #data_manager.change_phone(edit_id, new_number)
-        #applicants=data_manager.get_all_applicants()
-        #return render_template("/applicant_with_all_data", applicants=applicants)
-
+@database_common.connection_handler
+def get_tag(cursor, question_id):
+    cursor.execute("""
+                    SELECT tag_id FROM question_tag
+                    WHERE question_id = %(question_id)s;
+                    """,
+                   {'question_id': question_id})
+    tag_id = cursor.fetchone()['tag_id']
+    cursor.execute("""
+                    SELECT name FROM tag
+                    WHERE id = %(tag_id)s;
+                    """,
+                   {'tag_id': tag_id})
+    tag = cursor.fetchone()
+    return tag
