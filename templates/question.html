@@ -15,17 +15,17 @@
   <tr>
     <td>View number: {{ view_number }}</td>
     <td>Popularity:  {{ popular_number }}</td>
-    <td><form method="get" action="/comment/{{ name }}"> <button type="submit">Comment</button></form></td>
+    <td><form method="get" action="/comment/{{ question_id }}"> <button type="submit">Comment</button></form></td>
   </tr>
 </table><br/>
 {% if tag %}<p>#{{ tag }}</p>
 </br>
-<td><form method="get" action="/delete-tag/{{ name }}"> <button type="submit">Delete tag</button></form></td>{% endif %}
+<td><form method="get" action="/delete-tag/{{ question_id }}"> <button type="submit">Delete tag</button></form></td>{% endif %}
 <p align="center">Show your feelings about the topic:</p>
-<a href="/like/{{ name }}">
+<a href="/like/{{ question_id }}">
 <img border="0" alt="Like" src="https://imageog.flaticon.com/icons/png/512/60/60993.png?size=1200x630f&pad=10,10,10,10&ext=png&bg=FFFFFFFF" height="51">
 </a>
-<a href="/dislike/{{ name }}">
+<a href="/dislike/{{ question_id }}">
     <img border="0" alt="Hate" src="http://cliparting.com/wp-content/uploads/2016/11/Heart-black-and-white-broken-heart-clipart-black-and-white-free-image.png" height="50"></a><br/>
 </p>
 <table style="width:90%" border="0" align="center">
@@ -41,15 +41,15 @@
   <tr>
     <td bgcolor="black" style="color:white"># {{ answer ['id'] }}</td>
     <td align="justify">{{ answer ['message'] }}</td>
-    <td><a href="/answer_like/{{ name }}/{{ answer['id'] }}"><img border="0" alt="Like" src="https://imageog.flaticon.com/icons/png/512/60/60993.png?size=1200x630f&pad=10,10,10,10&ext=png&bg=FFFFFFFF" height="25"></td>
-    <td><a href="/answer_dislike/{{ name }}/{{ answer['id'] }}"><img border="0" alt="Hate" src="http://cliparting.com/wp-content/uploads/2016/11/Heart-black-and-white-broken-heart-clipart-black-and-white-free-image.png" height="20"></a><br/></td>
+    <td><a href="/answer_like/{{ question_id }}/{{ answer['id'] }}"><img border="0" alt="Like" src="https://imageog.flaticon.com/icons/png/512/60/60993.png?size=1200x630f&pad=10,10,10,10&ext=png&bg=FFFFFFFF" height="25"></td>
+    <td><a href="/answer_dislike/{{ question_id }}/{{ answer['id'] }}"><img border="0" alt="Hate" src="http://cliparting.com/wp-content/uploads/2016/11/Heart-black-and-white-broken-heart-clipart-black-and-white-free-image.png" height="20"></a><br/></td>
     <td>{{ answer ['vote_number'] }}</td>
-    <td><form method="get" action="/answer_edit/{{ name }}/{{ answer['id'] }}"><button type="submit">Edit</button></form></td>
-    <td><form method="get" action="/comment_answer/{{ name }}"> <button type="submit">Comment</button></form></td>
+    <td><form method="get" action="/answer_edit/{{ question_id }}/{{ answer['id'] }}"><button type="submit">Edit</button></form></td>
+    <td><form method="get" action="/comment_answer/{{ question_id }}"> <button type="submit">Comment</button></form></td>
   </tr>
     {% endfor %}
 </table><br/>
-<form action="/question/add_new_answer/{{ name }}", method="POST">
+<form action="/question/add_new_answer/{{ question_id }}", method="POST">
     <label for="answer">Answer box:</label><br/>
     <textarea id="answer", name="answer" required></textarea><br/>
     <button type="submit">Let it out to the world!</button>

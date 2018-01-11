@@ -122,14 +122,15 @@ def update_question(cursor, question_id, title, message, image):
 
 
 @database_common.connection_handler
-def update_answer(cursor, name, question_id, message):
+def update_answer(cursor, answer_id, message):
     cursor.execute("""
                 UPDATE answer
-                SET message = %(message)s,
-                WHERE id = %(question_id)s,
-                AND id = %(id)s;
+                SET message = %(message)s
+                WHERE id = %(answer_id)s
+                AND id = %(answer_id)s;
                 """,
-                   {'id': name, 'question_id': question_id, 'message': message})
+                   { 'answer_id': answer_id, 'message': message }
+                )
 
 
 
@@ -148,7 +149,8 @@ def get_question_by_id(cursor, question_id):
 def get_answers_by_question_id(cursor, name):
     cursor.execute("""
                     SELECT * FROM answer
-                    WHERE question_id = %(question_id)s;
+                    WHERE question_id = %(question_id)s
+                    ORDER BY id ASC;
                     """,
                    {'question_id': name})
     answer_to_question = cursor.fetchall()
@@ -172,7 +174,7 @@ def get_answer_by_id(cursor, answer_id):
                     WHERE id = %(answer_id)s;
                     """,
                    {'answer_id': answer_id})
-    answer = cursor.fetchall()
+    answer = cursor.fetchone()
     return answer
 
 
@@ -374,17 +376,17 @@ def delete_tag_from_question(cursor, question_id):
                    {'question_id': question_id})
 
 @database_common.connection_handler
-def get_selected_answers_by_question_id(cursor, id, question_id):
+def get_selected_answers_by_question_id(cursor, id, answer_id):
     header = ['id', 'message']
     cursor.execute("""
-                    SELECT id, message FROM answer
-                    WHERE question_id = %(question_id)s
+                    SELECT id, message FROM comment
+                    WHERE answer_id = %(answer_id)s
                     AND id = %(id)s;
                     """,
-                   {'question_id': question_id, 'id': id})
+                   {'id': answer_id, 'answer_id': id})
     rows = cursor.fetchall()
     answer_rows = [
-        [1, ]
+
     ]
 
     for dict_row in rows:
