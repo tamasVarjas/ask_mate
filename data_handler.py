@@ -173,6 +173,7 @@ def update_question(cursor, question_id, view_number, vote_number):
                     """,
                    {'question_id': question_id, 'view_number': view_number, 'vote_number': vote_number})
 
+
 @database_common.connection_handler
 def add_new_comment(cursor, message, question_id):
     date_time = datetime.now()
@@ -181,6 +182,7 @@ def add_new_comment(cursor, message, question_id):
                     VALUES (%(date_time)s, %(message)s, %(question_id)s)
                     """,
                    {'date_time': date_time, 'message': message, 'question_id': question_id})
+
 
 @database_common.connection_handler
 def get_all_comments(cursor, question_id):
@@ -201,13 +203,15 @@ def get_all_comments(cursor, question_id):
             rows[len(rows) - 1].append(dict_row[column_name])
     return rows
 
+
 @database_common.connection_handler
 def delete_line(cursor, edit_id):
     cursor.execute("""
                     DELETE from comment 
                     WHERE id = %(edit_id)s;
                     """,
-                    {'edit_id': edit_id})
+                   {'edit_id': edit_id})
+
 
 @database_common.connection_handler
 def get_all_comments_answer(cursor, answer_id):
@@ -229,6 +233,7 @@ def get_all_comments_answer(cursor, answer_id):
     print(rows)
     return rows
 
+
 @database_common.connection_handler
 def add_new_comment_answer(cursor, message, answer_id):
     date_time = datetime.now()
@@ -237,6 +242,7 @@ def add_new_comment_answer(cursor, message, answer_id):
                     VALUES (%(date_time)s, %(message)s, %(answer_id)s)
                     """,
                    {'date_time': date_time, 'message': message, 'answer_id': answer_id})
+
 
 @database_common.connection_handler
 def get_tag(cursor, question_id):
@@ -253,6 +259,7 @@ def get_tag(cursor, question_id):
                    {'tag_id': tag_id})
     tag = cursor.fetchone()
     return tag
+
 
 @database_common.connection_handler
 def add_new_tag(cursor, new_tag):

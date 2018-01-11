@@ -91,7 +91,8 @@ def answer_popularity(name, question_id):
     if request.method == 'GET':
         answer_popular_number -= 1
         data_handler.update_answer_vote_number(name, answer_popular_number)
-    return redirect(url_for('counter_plus', answer_popular_number=answer_popular_number, name=name, question_id=question_id))
+    return redirect(
+        url_for('counter_plus', answer_popular_number=answer_popular_number, name=name, question_id=question_id))
 
 
 @app.route('/answer_edit/<int:name>/<int:question_id>', methods=["GET", "POST"])
@@ -108,23 +109,24 @@ def answer_edit(name, question_id):
 @app.route('/comment/<int:name>', methods=["GET", "POST"])
 def comment(name):
     if request.method == 'GET':
-        comments=data_handler.get_all_comments(name)
+        comments = data_handler.get_all_comments(name)
         return render_template("comment.html", name=name, comments=comments)
     else:
         comment = request.form["comment"]
         data_handler.add_new_comment(comment, name)
-        comments=data_handler.get_all_comments(name)
+        comments = data_handler.get_all_comments(name)
         return render_template("comment.html", name=name, comments=comments)
+
 
 @app.route('/comment_answer/<int:name>', methods=["GET", "POST"])
 def comment_answer(name):
     if request.method == 'GET':
-        comments=data_handler.get_all_comments_answer(name)
+        comments = data_handler.get_all_comments_answer(name)
         return render_template("comment_answer.html", name=name, comments=comments)
     else:
         comment_answer = request.form["comment"]
         data_handler.add_new_comment_answer(comment_answer, name)
-        comments=data_handler.get_all_comments_answer(name)
+        comments = data_handler.get_all_comments_answer(name)
         return render_template("comment_answer.html", name=name, comments=comments)
 
 
