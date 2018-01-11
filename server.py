@@ -6,9 +6,12 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    info = data_handler.get_all_data('question')
-    return render_template("main_page.html", info=info)
+    return render_template("main_page.html")
 
+@app.route('/table')
+def table():
+    info = data_handler.get_all_data('question')
+    return render_template("table.html", info=info)
 
 @app.route('/question/add_new_question', methods=['GET', 'POST'])
 def add_new_question():

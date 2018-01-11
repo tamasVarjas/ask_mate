@@ -4,39 +4,16 @@
     <body align="center">
         <h1 style="color:darkblue">Welcome Tech-geeks!</h1>
         <h3>Official platform for the people, who want to share thought and dicuss questions about technology.</h3>
-        <form method="get" action="/mentor_names"> <button class="button button1", type="submit"><strong>Questions</strong></button></form>
-        <form method="get" action="/nickname_from_miskolc" align="center"> <button class="button button2", type="submit"><strong>Ask</strong></button></form>
+
+        <a href="/table" class="button" >Questions</a>
+        <a href="/question/add_new_question" class="button">Ask it</a><br/><br/>
+
+
 
         <img src="http://www.tier3partners.com/wp-content/uploads/2016/06/technology-banner.jpg"
              height="360px" width="750" alt=""/>
         <form div="search" method="POST" action="/search_results">
             <input type="text" name="search_phrase">
             <input type="submit" value="Search">
-        </form>
-        <br>
-        <table align="center">
-            <tr style="color:steelblue">
-                <th>Index</th>
-                <th>Question</th>
-                <th>View Numbers</th>
-                <th>Popularity</th>
-            </tr>
-            {% for question_detail in info %}
-            <tr>
-                <td>{{ question_detail['id'] }}</td>
-                <td>{{ question_detail['title'] }}</td>
-                <td>{{ question_detail['view_number'] }}</td>
-                <td>{{ question_detail['vote_number'] }}</td>
-                <td>
-                    <form method="get" action="/question/{{ question_detail['id'] }}">
-                        <button type="submit">✓</button>
-                    </form>
-            </tr>
-            {% endfor %}
-        </table>
-        <br/>
-        <form method="get" action="/question/add_new_question">
-            <button type="submit">Ask something clever!</button>
-        </form>
 
 {% endblock %}
