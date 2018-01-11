@@ -136,7 +136,7 @@ def comment(name):
         return render_template("comment.html", name=name, comments=comments)
 
 
-@app.route('//<int:name>', methods=["GET", "POST"])
+@app.route('/comment_answer/<int:name>', methods=["GET", "POST"])
 def comment_answer(name):
     if request.method == 'GET':
         comments = data_handler.get_all_comments_answer(name)
