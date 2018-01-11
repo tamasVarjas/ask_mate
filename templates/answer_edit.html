@@ -5,16 +5,20 @@
     <title>Edit your answer:</title>
 </head>
 <body>
-    <table style="width:90%" border="0" align="center">
+    <h2>Edit your answer:</h2>
+    <table align="center">
   <tr bgcolor="black" style="color:white">
     <th>ID</th>
     <th >Answer:</th>
   </tr>
   <tr>
-    <td bgcolor="black" style="color:white"># {{ selected_answer[0] }}</td>
-    <td align="justify">{{ selected_answer[1] }}</td>
+    <td>#{{ selected_answer[1][0] }}</td>
+    <form action=/answer_edit_comment/{{selected_answer[1][0]}}/{{question_id}} method="POST">
+    <td><textarea id="message", name="message" rows="6" cols="95">{{ selected_answer[1][1] }}</textarea></td></form>
   </tr>
-</table><br/>
+</table>
+<h1 method="post" align="center"><button type="submit">Let it out to the world!</button></h1>
+<h1 align="left"><form method="get" action="/question/{{selected_answer[1][0]}}"><button type="submit">Get Back</button></form></h1>
 </form>
 </body>
 </html>
