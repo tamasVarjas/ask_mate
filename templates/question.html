@@ -18,9 +18,9 @@
     <td><form method="get" action="/comment/{{ name }}"> <button type="submit">Comment</button></form></td>
   </tr>
 </table><br/>
-{% if tag %}<p>#{{ tag }}</p> {% endif %}
+{% if tag %}<p>#{{ tag }}</p>
 </br>
-<a href='/delete-tag/{{ name }}'>Delete the tag</a>
+<td><form method="get" action="/delete-tag/{{ name }}"> <button type="submit">Delete tag</button></form></td>{% endif %}
 <p align="center">Show your feelings about the topic:</p>
 <a href="/like/{{ name }}">
 <img border="0" alt="Like" src="https://imageog.flaticon.com/icons/png/512/60/60993.png?size=1200x630f&pad=10,10,10,10&ext=png&bg=FFFFFFFF" height="51">
@@ -51,7 +51,7 @@
 </table><br/>
 <form action="/question/add_new_answer/{{ name }}", method="POST">
     <label for="answer">Answer box:</label><br/>
-    <textarea id="answer", name="answer"></textarea><br/>
+    <textarea id="answer", name="answer" required></textarea><br/>
     <button type="submit">Let it out to the world!</button>
 </form>
 <h4 align="left">
