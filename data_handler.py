@@ -253,3 +253,11 @@ def get_tag(cursor, question_id):
                    {'tag_id': tag_id})
     tag = cursor.fetchone()
     return tag
+
+@database_common.connection_handler
+def add_new_tag(cursor, new_tag):
+    cursor.execute("""
+                    INSERT INTO tag (name)
+                    VALUES (%(new_tag)s);
+                    """,
+                   {'new_tag': new_tag})
