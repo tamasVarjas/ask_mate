@@ -99,6 +99,7 @@ def add_new_question(cursor, title, message, image, tag):
                     """,
                    {'last_question_id': last_question_id['last_value'], 'tag_id': tag_id['id']})
 
+
 @database_common.connection_handler
 def add_new_answer(cursor, message, question_id):
     date_time = datetime.now()
@@ -231,7 +232,7 @@ def get_all_comments(cursor, question_id):
 @database_common.connection_handler
 def delete_line(cursor, edit_id):
     cursor.execute("""
-                    DELETE from comment 
+                    DELETE FROM comment 
                     WHERE id = %(edit_id)s;
                     """,
                    {'edit_id': edit_id})
@@ -315,6 +316,7 @@ def delete_tag(cursor, tag_id):
                     """,
                    {'tag_id': tag_id})
 
+
 @database_common.connection_handler
 def get_last_question_id(cursor):
     cursor.execute("""
@@ -324,6 +326,7 @@ def get_last_question_id(cursor):
     print(last_question_id['last_value'])
     return last_question_id
 
+
 @database_common.connection_handler
 def get_last_tag_id(cursor):
     cursor.execute("""
@@ -332,6 +335,7 @@ def get_last_tag_id(cursor):
     last_tag_id = cursor.fetchone()
     return last_tag_id
 
+
 @database_common.connection_handler
 def get_all_tags(cursor):
     cursor.execute("""
@@ -339,6 +343,7 @@ def get_all_tags(cursor):
                     """)
     tags = cursor.fetchall()
     return tags
+
 
 @database_common.connection_handler
 def get_tag_id_by_tag_name(cursor, tag):
@@ -366,6 +371,7 @@ def add_new_tag(cursor, new_tag):
                         """,
                        {'new_tag': new_tag})
 
+
 @database_common.connection_handler
 def delete_tag_from_question(cursor, question_id):
     cursor.execute("""
@@ -374,6 +380,7 @@ def delete_tag_from_question(cursor, question_id):
                     WHERE question_id = %(question_id)s;
                     """,
                    {'question_id': question_id})
+
 
 @database_common.connection_handler
 def get_selected_answers_by_question_id(cursor, id, answer_id):
@@ -395,4 +402,3 @@ def get_selected_answers_by_question_id(cursor, id, answer_id):
             answer_rows[len(answer_rows) - 1].append(dict_row[column_name])
     print(answer_rows)
     return answer_rows
-

@@ -79,9 +79,16 @@ def new_question(name):
 def answer_less_popularity(name, question_id):
     answer = data_handler.get_answer_by_id(name)
     answer_popular_number = answer['vote_number']
+    answer = data_handler.get_answer_by_id(question_id)
+    answer_popular_number = answer[0]['vote_number']
+    question = data_handler.get_question_by_id(name)
+    view_number = question[0]['view_number']
+    popular_number = question[0]['vote_number']
     if request.method == 'GET':
         answer_popular_number += 1
-        data_handler.update_answer_vote_number(name, answer_popular_number)
+        data_handler.update_answer_vote_number(question_id, answer_popular_number)
+        view_number -= 1
+        data_handler.update_question(name, view_number, popular_number)
     return redirect(
         url_for('question_details', answer_popular_number=answer_popular_number, name=name, question_id=question_id))
 
@@ -90,9 +97,16 @@ def answer_less_popularity(name, question_id):
 def answer_popularity(name, question_id):
     answer = data_handler.get_answer_by_id(name)
     answer_popular_number = answer['vote_number']
+    answer = data_handler.get_answer_by_id(question_id)
+    answer_popular_number = answer[0]['vote_number']
+    question = data_handler.get_question_by_id(name)
+    view_number = question[0]['view_number']
+    popular_number = question[0]['vote_number']
     if request.method == 'GET':
         answer_popular_number -= 1
-        data_handler.update_answer_vote_number(name, answer_popular_number)
+        data_handler.update_answer_vote_number(question_id, answer_popular_number)
+        view_number -= 1
+        data_handler.update_question(name, view_number, popular_number)
     return redirect(
         url_for('question_details', answer_popular_number=answer_popular_number, name=name, question_id=question_id))
 
