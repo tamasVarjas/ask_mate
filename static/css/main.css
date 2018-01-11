@@ -9,10 +9,7 @@ body {
     200px 200px;
     background-color: #eaebe9;
     color: #111113;
-
-
 }
-
 
 
 .content-wrapper {
@@ -20,9 +17,9 @@ body {
 }
 
 .table2 {
-    font-family: Arial, Verdana, sans-serif;
+    font-family: Verdana, Geneva, sans-serif;
     border-collapse: collapse;
-    width: 100%;
+    width: 80%;
 }
 
 .td2, .th2 {
@@ -34,3 +31,27 @@ body {
 tr:nth-child(even) {
     background-color: #dddddd;
 }
+
+h1 {
+    font-family: "Courier New", Courier, monospace;
+    text-align: center;
+}
+
+.button {
+    border: none;
+    color: white;
+    padding: 10px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+
+.button1 {background-color: #e7e7e7; color: black;}
+.button2 {background-color: #555555;}
+
+.a
+
+

@@ -16,8 +16,8 @@
     <td>{{comment[2]}}</td>
     <td><form method="get" action="/delete_comment_answer/{{name}}/{{comment[0]}}"> <button type="submit">Delete</button></form></td>
     <td><form method="get" action="/edit_comment_answer/{{name}}/{{comment[0]}}"> <button type="submit">Edit</button></form></td>
+      {% endfor %}
   </tr>
-    {% endfor %}
 </table>
 <br/>
 <body>

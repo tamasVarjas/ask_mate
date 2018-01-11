@@ -2,8 +2,11 @@
 {% extends "layout.html" %}
 {% block content %}
     <body align="center">
-        <h1 style="color:darkblue">Welcome Tech-geek!</h1>
-        <h2>This is an official platform for the people, who want to share thought or dicuss questions about technology. Be polite and have fun!</h2>
+        <h1 style="color:darkblue">Welcome Tech-geeks!</h1>
+        <h3>Official platform for the people, who want to share thought and dicuss questions about technology.</h3>
+        <form method="get" action="/mentor_names"> <button class="button button1", type="submit"><strong>Questions</strong></button></form>
+        <form method="get" action="/nickname_from_miskolc" align="center"> <button class="button button2", type="submit"><strong>Ask</strong></button></form>
+
         <img src="http://www.tier3partners.com/wp-content/uploads/2016/06/technology-banner.jpg"
              height="360px" width="750" alt=""/>
         <form div="search" method="POST" action="/search_results">
@@ -35,4 +38,5 @@
         <form method="get" action="/question/add_new_question">
             <button type="submit">Ask something clever!</button>
         </form>
+
 {% endblock %}

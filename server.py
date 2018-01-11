@@ -151,6 +151,7 @@ def delete_tag_from_question(name):
     data_handler.delete_tag_from_question(name)
     return redirect(url_for('counter_plus', name=name))
 
+
 @app.route('/delete_comment/<int:name>/<int:question_id>')
 def delete_comment(name, question_id):
     data_handler.delete_line(question_id)

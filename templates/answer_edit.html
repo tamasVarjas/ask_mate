@@ -13,7 +13,7 @@
   </tr>
   <tr>
     <td>#{{ selected_answer[1][0] }}</td>
-    <form action=/answer_edit_comment/{{selected_answer[1][0]}}/{{question_id}} method="POST">
+    <form action="/answer_edit_comment/{{selected_answer[1][0]}}/{{question_id}}" method="POST">
     <td><textarea id="message", name="message" rows="6" cols="95">{{ selected_answer[1][1] }}</textarea></td></form>
   </tr>
 </table>
