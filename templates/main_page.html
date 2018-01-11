@@ -1,19 +1,18 @@
 <!DOCTYPE html>
 {% extends "layout.html" %}
 {% block content %}
-    <body align="center">
-        <h1 style="color:darkblue">Welcome Tech-geeks!</h1>
-        <h3>Official platform for the people, who want to share thought and dicuss questions about technology.</h3>
+<body align="center">
+<h1 style="color:darkblue">Welcome Tech-geeks!</h1>
+<h3>Official platform for the people, who want to share thought and dicuss questions about technology.</h3>
 
-        <a href="/table" class="button" >Questions</a>
-        <a href="/question/add_new_question" class="button">Ask it</a><br/><br/>
+<a href="/table" class="button">Questions</a>
+<a href="/question/add_new_question" class="button">Ask it</a><br/><br/>
 
 
+<img src="http://www.tier3partners.com/wp-content/uploads/2016/06/technology-banner.jpg"
+     height="360px" width="750" alt=""/>
+<form div="search" method="POST" action="/search_results">
+    <input type="text" name="search_phrase">
+    <input type="submit" value="Search">
 
-        <img src="http://www.tier3partners.com/wp-content/uploads/2016/06/technology-banner.jpg"
-             height="360px" width="750" alt=""/>
-        <form div="search" method="POST" action="/search_results">
-            <input type="text" name="search_phrase">
-            <input type="submit" value="Search">
-
-{% endblock %}
+    {% endblock %}

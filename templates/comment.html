@@ -1,29 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-   <meta charset="UTF-8">
-   <title>Comment time</title>
+    <meta charset="UTF-8">
+    <title>Comment time</title>
 </head>
 <table style="width:100%">
-  <tr>
-    <th>Comment</th>
-    <th>Submission Time</th>
-    <td></td>
-  </tr>
+    <tr>
+        <th>Comment</th>
+        <th>Submission Time</th>
+        <td></td>
+    </tr>
     {% for comment in comments %}
-  <tr>
-    <td>{{comment[1]}}</td>
-    <td>{{comment[2]}}</td>
-    <td><form method="get" action="/delete_comment/{{name}}/{{comment[0]}}"> <button type="submit">Delete</button></form></td>
-  </tr>
+    <tr>
+        <td>{{comment[1]}}</td>
+        <td>{{comment[2]}}</td>
+        <td>
+            <form method="get" action="/delete_comment/{{name}}/{{comment[0]}}">
+                <button type="submit">Delete</button>
+            </form>
+        </td>
+    </tr>
     {% endfor %}
 </table>
 <br/>
 <body>
-<form action="/comment/{{name}}", method="POST">
-   <label for="comment">Put here some fancy description about your topic:</label><br/>
-   <textarea id="comment", name="comment"></textarea><br/>
-   <button type="submit">Let it out to the world!</button><br/><br/></form>
-   <form method="get" action="/question/{{name}}"> <button type="submit">Get Back</button></form>
+<form action="/comment/{{name}}" , method="POST">
+    <label for="comment">Put here some fancy description about your topic:</label><br/>
+    <textarea id="comment" , name="comment"></textarea><br/>
+    <button type="submit">Let it out to the world!</button>
+    <br/><br/></form>
+<form method="get" action="/question/{{name}}">
+    <button type="submit">Get Back</button>
+</form>
 </body>
 </html>

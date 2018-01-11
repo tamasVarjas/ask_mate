@@ -130,9 +130,8 @@ def update_answer(cursor, answer_id, message):
                 WHERE id = %(answer_id)s
                 AND id = %(answer_id)s;
                 """,
-                   { 'answer_id': answer_id, 'message': message }
-                )
-
+                   {'answer_id': answer_id, 'message': message}
+                   )
 
 
 @database_common.connection_handler
