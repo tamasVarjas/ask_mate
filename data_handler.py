@@ -299,10 +299,10 @@ def add_new_tag(cursor, new_tag):
 def get_search_results(cursor, search_phrase):
     cursor.execute("""
                     SELECT id, title, view_number, vote_number FROM question
-                    WHERE title LIKE %(search_phrase)s OR message LIKE %(search_phrase)s
+                    WHERE LOWER (title) LIKE %(search_phrase)s OR LOWER (message) LIKE %(search_phrase)s
                     ORDER BY id;
                    """,
-                   {'search_phrase': '%' + search_phrase + '%'})
+                   {'search_phrase': '%' + search_phrase.lower() + '%'})
     questions = cursor.fetchall()
 
     return questions
