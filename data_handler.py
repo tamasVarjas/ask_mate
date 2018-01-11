@@ -310,8 +310,8 @@ def get_search_results(cursor, search_phrase):
 @database_common.connection_handler
 def delete_tag(cursor, tag_id):
     cursor.execute("""
-                    DELETE FROM tag
-                    WHERE id = %(tag_id)s;
+                    DELETE FROM question_tag
+                    WHERE question_id = %(tag_id)s;
                     """,
                    {'tag_id': tag_id})
 

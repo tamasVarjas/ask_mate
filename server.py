@@ -167,7 +167,7 @@ def show_search_results(search_phrase):
 @app.route('/delete-tag/<int:name>')
 def delete_tag_from_question(name):
     data_handler.delete_tag_from_question(name)
-    return redirect(url_for('question_details', name=name))
+    return redirect(url_for('question_details', question_id=name))
 
 
 @app.route('/delete_comment/<int:name>/<int:question_id>')
