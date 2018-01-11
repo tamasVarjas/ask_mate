@@ -122,8 +122,15 @@ def update_question(cursor, question_id, title, message, image):
 
 
 @database_common.connection_handler
-def update_answer(cursor, answer_id, message, image):
-    pass
+def update_answer(cursor, name, question_id, message):
+    cursor.execute("""
+                UPDATE answer
+                SET message = %(message)s,
+                WHERE id = %(question_id)s;
+                AND id = %(id);
+                """,
+                   {'id': name, 'question_id': question_id, 'message': message})
+
 
 
 @database_common.connection_handler
@@ -276,7 +283,13 @@ def get_tag(cursor, question_id):
     return tag
 
 
-
+@database_common.connection_handler
+def add_new_tag(cursor, new_tag):
+    cursor.execute("""
+                    INSERT INTO tag (name)
+                    VALUES (%(new_tag)s);
+                    """,
+                   {'new_tag': new_tag})
 
 
 @database_common.connection_handler
@@ -359,3 +372,25 @@ def delete_tag_from_question(cursor, question_id):
                     WHERE question_id = %(question_id)s;
                     """,
                    {'question_id': question_id})
+
+@database_common.connection_handler
+def get_selected_answers_by_question_id(cursor, id, question_id):
+    header = ['id', 'message']
+    cursor.execute("""
+                    SELECT id, message FROM answer
+                    WHERE question_id = %(question_id)s
+                    AND id = %(id)s;
+                    """,
+                   {'question_id': question_id, 'id': id})
+    rows = cursor.fetchall()
+    answer_rows = [
+        [1, ]
+    ]
+
+    for dict_row in rows:
+        answer_rows.append([])
+        for column_name in header:
+            answer_rows[len(answer_rows) - 1].append(dict_row[column_name])
+    print(answer_rows)
+    return answer_rows
+

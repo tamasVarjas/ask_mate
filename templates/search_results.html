@@ -19,7 +19,7 @@
     </tr>
     {% for question in results %}
     <tr>
-        <td>{{ question['id'] }}</td>
+        <td><a href="/question/{{ question['id'] }}">{{ question['id'] }}</a></td>
         <td>{{ question['title'] }}</td>
         <td>{{ question['view_number'] }}</td>
         <td>{{ question['vote_number'] }}</td>
