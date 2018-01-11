@@ -69,7 +69,7 @@ def not_so_popular(name):
 @app.route("/question/add_new_answer/<int:name>", methods=['GET', 'POST'])
 def new_question(name):
     answer = request.form["answer"]
-    data_handler.add_new_answer(answer, name    )
+    data_handler.add_new_answer(answer, name)
     return redirect(url_for('counter_plus', name=name))
 
 
