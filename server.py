@@ -8,16 +8,18 @@ app = Flask(__name__)
 def index():
     return render_template("main_page.html")
 
+
 @app.route('/table')
 def table():
     info = data_handler.get_all_data('question')
     return render_template("table.html", info=info)
 
+
 @app.route('/question/add_new_question', methods=['GET', 'POST'])
 def add_new_question():
     if request.method == 'GET':
         tags = data_handler.get_all_tags()
-        return render_template("new_question.html", tags = tags)
+        return render_template("new_question.html", tags=tags)
     else:
         title = request.form["title"]
         message = request.form["message"]
@@ -42,7 +44,8 @@ def question_details(question_id):
         view_number += 1
         info[0]['view_number'] = view_number
         data_handler.update_view_number(view_number, question_id)
-    return render_template("question.html", question_id=question_id, question_data=question_data, detail_data=detail_data,
+    return render_template("question.html", question_id=question_id, question_data=question_data,
+                           detail_data=detail_data,
                            picture_data=picture_data, view_number=view_number, popular_number=popular_number,
                            tag=tag, answers=answers)
 
@@ -118,7 +121,7 @@ def answer_edit(question_id, answer_id):
 
     message = request.form['message']
     data_handler.update_answer(answer_id, message)
-    return redirect (url_for('question_details', question_id=question_id))
+    return redirect(url_for('question_details', question_id=question_id))
 
 
 @app.route('/comment/<int:name>', methods=["GET", "POST"])
@@ -137,12 +140,14 @@ def comment(name):
 def comment_answer(name):
     if request.method == 'GET':
         comments = data_handler.get_all_comments_answer(name)
-        return render_template("comment_answer.html", name=name, comments=comments)
+        question_id = data_handler.get_question_id_by_answer_id(name)
+        return render_template("comment_answer.html", name=name, comments=comments, question_id=question_id)
     else:
         comment_answer = request.form["comment"]
         data_handler.add_new_comment_answer(comment_answer, name)
         comments = data_handler.get_all_comments_answer(name)
-        return render_template("comment_answer.html", name=name, comments=comments)
+        question_id = data_handler.get_question_id_by_answer_id(name)
+        return render_template("comment_answer.html", name=name, comments=comments, question_id=question_id)
 
 
 @app.route('/search_results', methods=['GET', 'POST'])
@@ -180,15 +185,16 @@ def delete_comment_answer(name, question_id):
     return render_template('comment_answer.html', name=name, comments=comments)
 
 
-@app.route('/edit_comment_answer/<int:name>/<int:question_id>', methods=["GET", "POST"])
-def answer_edit_comment(name, question_id):
+@app.route('/edit_comment_answer/<int:answer_id>/<int:comment_id>', methods=["GET", "POST"])
+def answer_edit_comment(answer_id, comment_id):
+    comment = data_handler.get_comment_by_id(comment_id)
     if request.method == 'GET':
-        edit_selected = data_handler.get_selected_answers_by_question_id(name, question_id)
-        return render_template("answer_edit.html", selected_answer=edit_selected, question_id=question_id)
+        return render_template("comment_edit.html", comment=comment, answer_id=answer_id)
     else:
-        new_answer=request.form['message']
-        data_handler.update_answer(name, question_id, new_answer)
-        return redirect (url_for('/question/<int:name>'))
+        message = request.form['message']
+        comment_id = comment['id']
+        data_handler.update_comment(comment_id, message)
+        return redirect(url_for('comment_answer', name=answer_id))
 
 
 if __name__ == '__main__':

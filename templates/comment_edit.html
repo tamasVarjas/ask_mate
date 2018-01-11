@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Edit your comment:</title>
+    </head>
+    <body>
+    <h2>Edit your comment:</h2>
+    <form action="/edit_comment_answer/{{ answer_id }}/{{ comment.id }}" method="POST">
+        <table align="center">
+            <tr bgcolor="black" style="color:white">
+                <th>ID</th>
+                <th>Comment:</th>
+            </tr>
+            <tr>
+                <td>#{{ comment.id }}</td>
+                <td><textarea id="message" name="message" rows="6" cols="95">{{ comment.message }}</textarea></td>
+            </tr>
+        </table>
+        <h1 method="post" align="center">
+            <button type="submit">Let it out to the world!</button>
+        </h1>
+        <h1 align="left">
+            <button type="submit">Get Back</button>
+        </h1>
+    </form>
+    </body>
+</html>

@@ -402,3 +402,35 @@ def get_selected_answers_by_question_id(cursor, id, answer_id):
             answer_rows[len(answer_rows) - 1].append(dict_row[column_name])
     print(answer_rows)
     return answer_rows
+
+
+@database_common.connection_handler
+def update_comment(cursor, id, message):
+    cursor.execute("""
+                    UPDATE comment
+                    SET message = %(message)s
+                    WHERE id = %(id)s;
+                    """,
+                   {'message': message, 'id': id})
+
+
+@database_common.connection_handler
+def get_question_id_by_answer_id(cursor, answer_id):
+    cursor.execute("""
+                    SELECT question_id FROM answer
+                    WHERE id = %(answer_id)s;
+                    """,
+                   {'answer_id': answer_id})
+    question_id = cursor.fetchone()
+    return question_id
+
+
+@database_common.connection_handler
+def get_comment_by_id(cursor, comment_id):
+    cursor.execute("""
+                    SELECT * FROM comment
+                    WHERE id = %(comment_id)s;
+                    """,
+                   {'comment_id': comment_id})
+    comment_id = cursor.fetchone()
+    return comment_id
