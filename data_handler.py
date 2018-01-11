@@ -85,13 +85,13 @@ def add_new_question(cursor, title, message, image):
 
 
 @database_common.connection_handler
-def add_new_answer(cursor, message, image, question_id):
+def add_new_answer(cursor, message, question_id):
     date_time = datetime.now()
     cursor.execute("""
-                    INSERT INTO answer (submission_time, vote_number, question_id, message, image) 
-                    VALUES (%(date_time)s, 0, %(question_id)s, %(message)s, %(image)s)
+                    INSERT INTO answer (submission_time, vote_number, question_id, message) 
+                    VALUES (%(date_time)s, 0, %(question_id)s, %(message)s)
                     """,
-                   {'date_time': date_time, 'question_id': question_id, 'message': message, 'image': image})
+                   {'date_time': date_time, 'question_id': question_id, 'message': message})
 
 
 @database_common.connection_handler
@@ -107,7 +107,7 @@ def update_question(cursor, question_id, title, message, image):
 
 
 @database_common.connection_handler
-def update_answer(cursor, message, image):
+def update_answer(cursor, answer_id, message, image):
     pass
 
 
@@ -126,7 +126,7 @@ def get_question_by_id(cursor, question_id):
 def get_answers_by_question_id(cursor, name):
     cursor.execute("""
                     SELECT * FROM answer
-                    WHERE id = %(question_id)s;
+                    WHERE question_id = %(question_id)s;
                     """,
                    {'question_id': name})
     answer_to_question = cursor.fetchall()
@@ -274,3 +274,12 @@ def get_search_results(cursor, search_phrase):
     questions = cursor.fetchall()
 
     return questions
+
+
+@database_common.connection_handler
+def delete_tag(cursor, tag_id):
+    cursor.execute("""
+                    DELETE FROM tag
+                    WHERE id = %(tag_id)s;
+                    """,
+                   {'tag_id': tag_id})
