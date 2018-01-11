@@ -13,12 +13,14 @@ def index():
 @app.route('/question/add_new_question', methods=['GET', 'POST'])
 def add_new_question():
     if request.method == 'GET':
-        return render_template("new_question.html")
+        tags = data_handler.get_all_tags()
+        return render_template("new_question.html", tags = tags)
     else:
         title = request.form["title"]
         message = request.form["message"]
         image = request.form["image"]
-        data_handler.add_new_question(title, message, image)
+        tag = request.form["tag"]
+        data_handler.add_new_question(title, message, image, tag)
         return redirect("/")
 
 
@@ -143,6 +145,11 @@ def show_search_results(search_phrase):
     results = data_handler.get_search_results(search_phrase)
     return render_template('search_results.html', results=results)
 
+
+@app.route('/delete-tag/<int:name>')
+def delete_tag_from_question(name):
+    data_handler.delete_tag_from_question(name)
+    return redirect(url_for('counter_plus', name=name))
 
 @app.route('/delete_comment/<int:name>/<int:question_id>')
 def delete_comment(name, question_id):
