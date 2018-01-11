@@ -129,11 +129,19 @@ def comment_answer(name):
         return render_template("comment_answer.html", name=name, comments=comments)
 
 
+@app.route('/search_results', methods=['GET', 'POST'])
+def find_search_results():
+    form_data = request.form.to_dict()
+    search_phrase = form_data['search_phrase']
+
+    return redirect(url_for('show_search_results', search_phrase=search_phrase))
+
 
 @app.route('/search?q=<search_phrase>')
 def show_search_results(search_phrase):
     results = data_handler.get_search_results(search_phrase)
     return render_template('search_results.html', results=results)
+
 
 @app.route('/delete_comment/<int:name>/<int:question_id>')
 def delete_comment(name, question_id):

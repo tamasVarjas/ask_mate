@@ -261,3 +261,16 @@ def add_new_tag(cursor, new_tag):
                     VALUES (%(new_tag)s);
                     """,
                    {'new_tag': new_tag})
+
+
+@database_common.connection_handler
+def get_search_results(cursor, search_phrase):
+    cursor.execute("""
+                    SELECT id, title, view_number, vote_number FROM question
+                    WHERE title LIKE %(search_phrase)s OR message LIKE %(search_phrase)s
+                    ORDER BY id;
+                   """,
+                   {'search_phrase': '%' + search_phrase + '%'})
+    questions = cursor.fetchall()
+
+    return questions
