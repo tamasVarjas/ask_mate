@@ -1,27 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>Welcome Traveler!</title>
-        <style>
-            table, th, td {
-                border: 1px solid black;
-            }
-        </style>
-    </head>
+{% extends "layout.html" %}
+{% block content %}
     <body align="center">
-        <h1 style="color:red">Welcome Traveler!</h1>
-        <h2>If you are a nice geek or just simply a comic lover deep in your heart, then you are exactly in the right place.
-            Share your thoughts about any Marvel topic, which you like. Be polite and have fun!</h2>
-        <img src="https://img00.deviantart.net/820a/i/2016/109/5/4/marvel_cinematic_universe_2_0_by_tymann930-d9zjipk.png"
-             height="405px" alt=""/>
+        <h1 style="color:darkblue">Welcome Tech-geek!</h1>
+        <h2>This is an official platform for the people, who want to share thought or dicuss questions about technology. Be polite and have fun!</h2>
+        <img src="http://www.tier3partners.com/wp-content/uploads/2016/06/technology-banner.jpg"
+             height="360px" width="750" alt=""/>
         <form div="search" method="POST" action="/search_results">
             <input type="text" name="search_phrase">
             <input type="submit" value="Search">
         </form>
         <br>
         <table align="center">
-            <tr style="color:darkred">
+            <tr style="color:steelblue">
                 <th>Index</th>
                 <th>Question</th>
                 <th>View Numbers</th>
@@ -44,5 +35,4 @@
         <form method="get" action="/question/add_new_question">
             <button type="submit">Ask something clever!</button>
         </form>
-    </body>
-</html>
+{% endblock %}

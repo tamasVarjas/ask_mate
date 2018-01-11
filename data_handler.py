@@ -119,8 +119,8 @@ def update_answer(cursor, name, question_id, message):
     cursor.execute("""
                 UPDATE answer
                 SET message = %(message)s,
-                WHERE id = %(question_id)s;
-                AND id = %(id);
+                WHERE id = %(question_id)s,
+                AND id = %(id)s;
                 """,
                    {'id': name, 'question_id': question_id, 'message': message})
 

@@ -1,0 +1,36 @@
+body {
+    padding: 25px;
+    background: url("http://www.amcham.si/assets/images/header-background-blue-xs.png"), url("https://i.imgur.com/f8vNJCt.gif");
+    background-position: right top,
+    left top;
+    background-repeat: no-repeat,
+    no-repeat;
+    background-size: 1200px 200px,
+    200px 200px;
+    background-color: #eaebe9;
+    color: #111113;
+
+
+}
+
+
+
+.content-wrapper {
+    padding: 10%;
+}
+
+.table2 {
+    font-family: Arial, Verdana, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.td2, .th2 {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
