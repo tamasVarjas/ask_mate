@@ -124,30 +124,30 @@ def answer_edit(question_id, answer_id):
     return redirect(url_for('question_details', question_id=question_id))
 
 
-@app.route('/comment/<int:name>', methods=["GET", "POST"])
-def comment(name):
+@app.route('/comment/<int:question_id>', methods=["GET", "POST"])
+def question_comment(question_id):
     if request.method == 'GET':
-        comments = data_handler.get_all_comments(name)
-        return render_template("comment.html", name=name, comments=comments)
+        comments = data_handler.get_all_comments(question_id)
+        return render_template("comment.html", question_id=question_id, comments=comments)
     else:
         comment = request.form["comment"]
-        data_handler.add_new_comment(comment, name)
-        comments = data_handler.get_all_comments(name)
-        return render_template("comment.html", name=name, comments=comments)
+        data_handler.add_new_comment(comment, question_id)
+        comments = data_handler.get_all_comments(question_id)
+        return render_template("comment.html", question_id=question_id, comments=comments)
 
 
-@app.route('/comment_answer/<int:name>', methods=["GET", "POST"])
-def comment_answer(name):
+@app.route('/comment_answer/<int:answer_id>', methods=["GET", "POST"])
+def answer_comment(answer_id):
     if request.method == 'GET':
-        comments = data_handler.get_all_comments_answer(name)
-        question_id = data_handler.get_question_id_by_answer_id(name)
-        return render_template("comment_answer.html", name=name, comments=comments, question_id=question_id)
+        comments = data_handler.get_all_comments_answer(answer_id)
+        question_id = data_handler.get_question_id_by_answer_id(answer_id)
+        return render_template("comment_answer.html", answer_id=answer_id, comments=comments, question_id=question_id)
     else:
         comment_answer = request.form["comment"]
-        data_handler.add_new_comment_answer(comment_answer, name)
-        comments = data_handler.get_all_comments_answer(name)
-        question_id = data_handler.get_question_id_by_answer_id(name)
-        return render_template("comment_answer.html", name=name, comments=comments, question_id=question_id)
+        data_handler.add_new_comment_answer(comment_answer, answer_id)
+        comments = data_handler.get_all_comments_answer(answer_id)
+        question_id = data_handler.get_question_id_by_answer_id(answer_id)
+        return render_template("comment_answer.html", answer_id=answer_id, comments=comments, question_id=question_id)
 
 
 @app.route('/search_results', methods=['GET', 'POST'])
