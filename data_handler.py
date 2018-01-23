@@ -1,14 +1,5 @@
 from datetime import datetime
-import time
 import database_common
-
-
-def timestamp_to_datetime(database):
-    for data in database:
-        data['submission_time'] = datetime.datetime.fromtimestamp(int(data['submission_time'])).strftime(
-            '%Y-%m-%d %H:%M:%S')
-
-    return database
 
 
 @database_common.connection_handler
@@ -59,20 +50,6 @@ def get_answers(cursor, question_id):
                    {'question_id': question_id})
     answers = cursor.fetchall()
     return answers
-
-
-# TODO: It's not the best that it makes timestamp_to_datetime, but at this moment, this one is working.
-def edit_data(database, updated_data, _id):
-    for data in database:
-        if _id == data['id']:
-            for element in updated_data:
-                data[element] = updated_data[element]
-
-    return database
-
-
-def make_unix_timestamp():
-    return round(time.time())
 
 
 @database_common.connection_handler
@@ -254,7 +231,6 @@ def get_all_comments_answer(cursor, answer_id):
         rows.append([])
         for column_name in header:
             rows[len(rows) - 1].append(dict_row[column_name])
-    print(rows)
     return rows
 
 
@@ -325,7 +301,6 @@ def get_last_question_id(cursor):
                     SELECT last_value FROM question_id_seq;
                     """)
     last_question_id = cursor.fetchone()
-    print(last_question_id['last_value'])
     return last_question_id
 
 
@@ -402,7 +377,6 @@ def get_selected_answers_by_question_id(cursor, id, answer_id):
         answer_rows.append([])
         for column_name in header:
             answer_rows[len(answer_rows) - 1].append(dict_row[column_name])
-    print(answer_rows)
     return answer_rows
 
 
