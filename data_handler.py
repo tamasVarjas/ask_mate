@@ -278,6 +278,7 @@ def get_search_results(cursor, search_phrase):
                     WHERE LOWER (title) LIKE %(search_phrase)s
                           OR LOWER (question.message) LIKE %(search_phrase)s
                           OR LOWER (answer.message) LIKE %(search_phrase)s
+                    GROUP BY question.id
                     ORDER BY id;
                    """,
                    {'search_phrase': '%' + search_phrase.lower() + '%'})
