@@ -1,10 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Question time</title>
-</head>
-<body>
+{% extends "layout.html" %}
+{% block content %}<br/><br/>
 <form action="/question/add_new_question" , method="POST">
     <label for="title">Give me your question, pal:</label><br/>
     <input id="title" , name="title" type="text"> <br/>
@@ -18,8 +14,10 @@
         {% for tag in tags %}
         <option value="{{ tag['name'] }}">
             {% endfor %}
-    </datalist>
-    <button type="submit">Let it out to the world!</button>
+    </datalist><br/><br/>
+    <button type="submit">Let it out to the world!</button><br/>
+<form method="get" action="/question/{{name}}">
+    <button type="submit">Get Back</button>
 </form>
-</body>
-</html>
+</form>
+{% endblock %}

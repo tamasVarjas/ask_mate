@@ -198,5 +198,15 @@ def edit_answer_comment(answer_id, comment_id):
         return redirect(url_for('answer_comment', answer_id=answer_id))
 
 
+@app.route('/registration', methods=["GET", "POST"])
+def registration():
+    if request.method == 'GET':
+        return render_template("user_registration.html")
+
+@app.route('/log_in', methods=["GET", "POST"])
+def log_in():
+    if request.method == 'GET':
+        return render_template("log_in.html")
+
 if __name__ == '__main__':
     app.run(debug=True)
