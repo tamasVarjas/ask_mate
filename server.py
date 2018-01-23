@@ -50,28 +50,28 @@ def question_details(question_id):
                            tag=tag, answers=answers)
 
 
-@app.route('/like/<int:name>', methods=["GET"])
-def popularity(name):
-    question = data_handler.get_question_by_id(name)
+@app.route('/like/<int:question_id>', methods=["GET"])
+def popularity(question_id):
+    question = data_handler.get_question_by_id(question_id)
     popular_number = question[0]['vote_number']
     view_number = question[0]['view_number']
     if request.method == 'GET':
         popular_number += 1
         view_number -= 1
-        data_handler.update_question(name, view_number, popular_number)
-    return redirect(url_for('question_details', question_id=name))
+        data_handler.update_question(question_id, view_number, popular_number)
+    return redirect(url_for('question_details', question_id=question_id))
 
 
-@app.route('/dislike/<int:name>', methods=["GET"])
-def not_so_popular(name):
-    question = data_handler.get_question_by_id(name)
+@app.route('/dislike/<int:question_id>', methods=["GET"])
+def not_so_popular(question_id):
+    question = data_handler.get_question_by_id(question_id)
     popular_number = question[0]['vote_number']
     view_number = question[0]['view_number']
     if request.method == 'GET':
         popular_number += -1
         view_number -= 1
-        data_handler.update_question(name, view_number, popular_number)
-    return redirect(url_for('question_details', question_id=name))
+        data_handler.update_question(question_id, view_number, popular_number)
+    return redirect(url_for('question_details', question_id=question_id))
 
 
 @app.route("/question/add_new_answer/<int:name>", methods=['GET', 'POST'])
