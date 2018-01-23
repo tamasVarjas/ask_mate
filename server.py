@@ -74,11 +74,11 @@ def not_so_popular(question_id):
     return redirect(url_for('question_details', question_id=question_id))
 
 
-@app.route("/question/add_new_answer/<int:name>", methods=['GET', 'POST'])
-def new_question(name):
+@app.route("/question/add_new_answer/<int:question_id>", methods=['GET', 'POST'])
+def add_new_answer(question_id):
     answer = request.form["answer"]
-    data_handler.add_new_answer(answer, name)
-    return redirect(url_for('question_details', question_id=name))
+    data_handler.add_new_answer(answer, question_id)
+    return redirect(url_for('question_details', question_id=question_id))
 
 
 @app.route('/answer_like/<int:name>/<int:question_id>', methods=["GET", "POST"])
