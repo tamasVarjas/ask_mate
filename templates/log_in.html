@@ -3,15 +3,12 @@
 {% block content %}
 <head>
     <meta charset="UTF-8">
-    <title>Registration</title>
+    <title>Sign In</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/registration.css') }}">
 </head>
 
-    <h1 align="center">Registration</h1>
-    <p align="center"></p>
-    <p align="center">Please fill in this form to create an account. If you already have an account you can <a href="/log_in">log in</a>.</p>
-
-    <hr>
+    <h1 align="center">Sign In</h1>
+    <p align="center">If you have an account you can log in here, otherwise you can <a href="/registration">register</a>.</p>
 
     <label><b>Username</b></label>
     <input type="text" placeholder="Enter Username" name="username" required>
@@ -19,16 +16,10 @@
     <label><b>Password</b></label>
     <input type="password" placeholder="Enter Password" name="psw" required>
 
-    <label><b>Repeat Password</b></label>
-    <input type="password" placeholder="Repeat Password" name="psw-repeat" required>
-
-    <label><b>Profil picture</b></label>
-    <input type="text" placeholder="Picture Link" name="image" > <br/>
-
     <label>
     <input type="checkbox" checked="checked" style="margin-bottom:15px"> Remember me
     </label><br/>
     <form><input type="button" value="Cancel" onclick="window.location.href='/'" /></form>
-    <form align="center"><input type="button" value="Register" onclick="window.location.href='/'" /></form>
+    <form align="center"><input type="button" value="Sign In" onclick="window.location.href='/'" /></form>
 
 {% endblock %}

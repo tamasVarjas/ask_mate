@@ -201,6 +201,10 @@ def registration():
     if request.method == 'GET':
         return render_template("user_registration.html")
 
+@app.route('/log_in', methods=["GET", "POST"])
+def log_in():
+    if request.method == 'GET':
+        return render_template("log_in.html")
 
 if __name__ == '__main__':
     app.run(debug=True)
