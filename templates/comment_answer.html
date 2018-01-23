@@ -33,10 +33,10 @@
 <body>
 <form action="/comment_answer/{{answer_id}}" , method="POST">
     <label for="comment">Put here some fancy description about your topic:</label><br/>
-    <textarea id="comment" , name="comment"></textarea><br/>
+    <textarea id="comment", name="comment"></textarea><br/>
     <button type="submit">Let it out to the world!</button>
     <br/><br/></form>
-<form method="get" action="/question/{{question_id}}">
+<form method="get" action="/question/{{question_id.question_id}}">
     <button type="submit">Get Back</button>
 </form>
 </body>

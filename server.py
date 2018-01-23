@@ -187,7 +187,7 @@ def delete_answer_comment(answer_id, comment_id):
 
 
 @app.route('/edit_comment_answer/<int:answer_id>/<int:comment_id>', methods=["GET", "POST"])
-def answer_edit_comment(answer_id, comment_id):
+def edit_answer_comment(answer_id, comment_id):
     comment = data_handler.get_comment_by_id(comment_id)
     if request.method == 'GET':
         return render_template("comment_edit.html", comment=comment, answer_id=answer_id)
@@ -195,7 +195,7 @@ def answer_edit_comment(answer_id, comment_id):
         message = request.form['message']
         comment_id = comment['id']
         data_handler.update_comment(comment_id, message)
-        return redirect(url_for('comment_answer', name=answer_id))
+        return redirect(url_for('answer_comment', answer_id=answer_id))
 
 
 if __name__ == '__main__':
