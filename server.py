@@ -196,6 +196,11 @@ def answer_edit_comment(answer_id, comment_id):
         data_handler.update_comment(comment_id, message)
         return redirect(url_for('comment_answer', name=answer_id))
 
+@app.route('/registration', methods=["GET", "POST"])
+def registration():
+    if request.method == 'GET':
+        return render_template("user_registration.html")
+
 
 if __name__ == '__main__':
     app.run(debug=True)
