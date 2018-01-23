@@ -178,11 +178,12 @@ def delete_question_comment(question_id, comment_id):
     return render_template('comment.html', question_id=question_id, comments=comments)
 
 
-@app.route('/delete_comment_answer/<int:name>/<int:question_id>')
-def delete_comment_answer(name, question_id):
-    data_handler.delete_line(question_id)
-    comments = data_handler.get_all_comments_answer(name)
-    return render_template('comment_answer.html', name=name, comments=comments)
+@app.route('/delete_comment_answer/<int:answer_id>/<int:comment_id>')
+def delete_answer_comment(answer_id, comment_id):
+    data_handler.delete_line(comment_id)
+    comments = data_handler.get_all_comments_answer(answer_id)
+    question_id = data_handler.get_question_id_by_answer_id(answer_id)
+    return render_template('comment_answer.html', answer_id=answer_id, question_id=question_id, comments=comments)
 
 
 @app.route('/edit_comment_answer/<int:answer_id>/<int:comment_id>', methods=["GET", "POST"])
