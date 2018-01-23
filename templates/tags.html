@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tags</title>
+</head>
+<body>
+    <table>
+    {% for tag in tags %}
+        <tr>
+         <td>{{ tag ['name'] }}</td>
+         <td>{{ tag ['count'] }}</td>
+        </tr>
+    {% endfor %}
+    </table>
+</body>
+</html>
