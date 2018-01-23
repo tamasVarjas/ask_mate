@@ -297,8 +297,11 @@ def add_new_tag(cursor, new_tag):
 @database_common.connection_handler
 def get_search_results(cursor, search_phrase):
     cursor.execute("""
-                    SELECT id, title, view_number, vote_number FROM question
-                    WHERE LOWER (title) LIKE %(search_phrase)s OR LOWER (message) LIKE %(search_phrase)s
+                    SELECT question.id, question.title, question.view_number, question.vote_number FROM question
+                    JOIN answer ON question.id = answer.question_id
+                    WHERE LOWER (title) LIKE %(search_phrase)s
+                          OR LOWER (question.message) LIKE %(search_phrase)s
+                          OR LOWER (answer.message) LIKE %(search_phrase)s
                     ORDER BY id;
                    """,
                    {'search_phrase': '%' + search_phrase.lower() + '%'})
