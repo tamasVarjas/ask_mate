@@ -170,12 +170,12 @@ def delete_tag_from_question(question_id):
     return redirect(url_for('question_details', question_id=question_id))
 
 
-@app.route('/delete_comment/<int:name>/<int:question_id>')
-def delete_comment(name, question_id):
-    data_handler.delete_line(question_id)
-    comments = data_handler.get_all_comments(name)
-    print(comments)
-    return render_template('comment.html', name=name, comments=comments)
+@app.route('/delete_comment/<int:question_id>/<int:comment_id>')
+def delete_question_comment(question_id, comment_id):
+    data_handler.delete_line(comment_id)
+    comments = data_handler.get_all_comments(question_id)
+
+    return render_template('comment.html', question_id=question_id, comments=comments)
 
 
 @app.route('/delete_comment_answer/<int:name>/<int:question_id>')
