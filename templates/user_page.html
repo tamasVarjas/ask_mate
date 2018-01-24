@@ -1,47 +1,84 @@
 <!DOCTYPE html>
 <html lang="en">
+
 {% extends "layout.html" %}
 {% block content %}
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
+
+    {% if questions != [] %}
     <h2>User's questions:</h2>
-    <table>
+    <table class="table_user">
+        <thead>
+            <tr>
+                <th>Question title</th>
+            </tr>
+        </thead>
         {% for question in questions %}
         <tr>
-            <td>{{ question['title'] }}</td>
+            <td><a href="{{ url_for('question_details', question_id=question.id) }}">{{ question['title'] }}</a></td>
         </tr>
         {% endfor %}
     </table>
     <br>
+    {% endif %}
+
+    {% if answers != [] %}
     <h2>User's answers:</h2>
-    <table>
+    <table class="table_user">
+        <thead>
+            <tr>
+                <th>Answer</th>
+                <th>Question title</th>
+            </tr>
+        </thead>
         {% for answer in answers %}
         <tr>
             <td>{{ answer['message'] }}</td>
-            <td>{{ answer['title'] }}</td>
+            <td><a href="{{ url_for('question_details', question_id=answer.question_id) }}">{{ answer['title'] }}</a></td>
         </tr>
         {% endfor %}
     </table>
     <br>
+    {% endif %}
+
+    {% if comments != [] %}
     <h2>User's comments to questions:</h2>
-    <table>
+    <table class="table_user">
+        <thead>
+            <tr>
+                <th>Comment</th>
+                <th>Question title</th>
+            </tr>
+        </thead>
         {% for comment in comments %}
+        {% if comment.title != None %}
         <tr>
             <td>{{ comment['comment'] }}</td>
-            <td>{{ comment['title'] }}</td>
+            <td><a href="{{ url_for('question_details', question_id=comment.question_id) }}">{{ comment['title'] }}</a></td>
         </tr>
+        {% endif %}
         {% endfor %}
     </table>
+    {% endif %}
+
+    {% if comments != [] %}
     <h2>User's comments to answers:</h2>
-    <table>
+    <table class="table_user">
+        <thead>
+            <tr>
+                <th>Comment</th>
+                <th>Answer</th>
+            </tr>
+        </thead>
         {% for comment in comments %}
-        <tr>
+        {% if comment.message != None %}
+            <tr>
             <td>{{ comment['comment'] }}</td>
             <td>{{ comment['message'] }}</td>
         </tr>
+        {% endif %}
         {% endfor %}
     </table>
-    {% endblock %}
+    {% endif %}
+
+{% endblock %}
 </html>
