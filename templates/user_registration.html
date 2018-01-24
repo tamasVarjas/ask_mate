@@ -5,30 +5,46 @@
     <meta charset="UTF-8">
     <title>Registration</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/registration.css') }}">
+
+ <script>
+     var check = function() {
+          if (document.getElementById('password').value ==
+              document.getElementById('confirm_password').value) {
+              document.getElementById('message').style.color = 'green';
+              document.getElementById('message').innerHTML = 'matching';
+          } else {
+              document.getElementById('message').style.color = 'red';
+              document.getElementById('message').innerHTML = 'not matching';
+          }
+      }
+  </script>
+
 </head>
 
     <h1 align="center">Registration</h1>
     <p align="center"></p>
     <p align="center">Please fill in this form to create an account. If you already have an account you can <a href="/log_in">log in</a>.</p>
 
-    <hr>
-
+    <form action="/registration" method="POST">
     <label><b>Username</b></label>
     <input type="text" placeholder="Enter Username" name="username" required>
 
+
     <label><b>Password</b></label>
-    <input type="password" placeholder="Enter Password" name="psw" required>
+    <input type="password" placeholder="Enter Password" id="password" name="password" required onkeyup='check();' >
 
     <label><b>Repeat Password</b></label>
-    <input type="password" placeholder="Repeat Password" name="psw-repeat" required>
+    <input type="password" placeholder="Repeat Password" id="confirm_password" name="confirm_password" required onkeyup='check();' >
+    <span id='message'></span><br/><br/>
+
 
     <label><b>Profil picture</b></label>
-    <input type="text" placeholder="Picture Link" name="image" > <br/>
+    <input type="text" placeholder="Picture Link" name="image" ><br/>
 
     <label>
-    <input type="checkbox" checked="checked" style="margin-bottom:15px"> Remember me
-    </label><br/>
-    <form><input type="button" value="Cancel" onclick="window.location.href='/'" /></form>
-    <form align="center"><input type="button" value="Register" onclick="window.location.href='/'" /></form>
+    <input type="checkbox" checked="checked" style="margin-bottom:15px"> Remember me</label><br/>
+    <button type="submit">Register</button>
+
+    <form><input type="button" value="Cancel" onclick="window.location.href='/'" /></form></form>
 
 {% endblock %}

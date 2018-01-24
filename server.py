@@ -1,5 +1,5 @@
 from flask import Flask, request, render_template, redirect, url_for
-import data_handler
+import data_handler, data_handler_2
 
 app = Flask(__name__)
 
@@ -200,6 +200,17 @@ def answer_edit_comment(answer_id, comment_id):
 def registration():
     if request.method == 'GET':
         return render_template("user_registration.html")
+    else:
+        username = request.form['username']
+        image = request.form['image']
+        password = request.form['password']
+        hashed_password = data_handler_2.hash_password(password)
+        if len(image) < 5:
+            data_handler_2.save_registration_without_image(username,hashed_password)
+        else:
+            data_handler_2.save_registration(username, hashed_password, image)
+        return render_template("log_in.html")
+
 
 @app.route('/log_in', methods=["GET", "POST"])
 def log_in():
