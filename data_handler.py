@@ -53,7 +53,7 @@ def get_answers(cursor, question_id):
 
 
 @database_common.connection_handler
-def add_new_question(cursor, title, message, image, tag):
+def add_new_question(cursor, title, message, image, tag, user_id):
     date_time = datetime.now()
     if image != '':
         cursor.execute("""
@@ -75,17 +75,27 @@ def add_new_question(cursor, title, message, image, tag):
                     VALUES (%(last_question_id)s, %(tag_id)s);
                     """,
                    {'last_question_id': last_question_id['last_value'], 'tag_id': tag_id['id']})
+    cursor.execute("""
+                    INSERT INTO user_question (question_id, user_id)
+                    VALUES (%(last_question_id)s, %(user_id)s)
+                    """,
+                   {'last_question_id': last_question_id['last_value'], 'user_id': user_id})
 
 
 @database_common.connection_handler
-def add_new_answer(cursor, message, question_id):
+def add_new_answer(cursor, message, question_id, user_id):
     date_time = datetime.now()
     cursor.execute("""
                     INSERT INTO answer (submission_time, vote_number, question_id, message) 
                     VALUES (%(date_time)s, 0, %(question_id)s, %(message)s)
                     """,
                    {'date_time': date_time, 'question_id': question_id, 'message': message})
-
+    last_answer_id = get_last_answer_id()
+    cursor.execute("""
+                    INSERT INTO user_answer (answer_id, user_id)
+                    VALUES (%(last_answer_id)s, %(user_id)s)
+                    """,
+                   {'last_answer_id': last_answer_id['last_value'], 'user_id': user_id})
 
 @database_common.connection_handler
 def update_question(cursor, question_id, title, message, image):
@@ -176,14 +186,19 @@ def update_question(cursor, question_id, view_number, vote_number):
 
 
 @database_common.connection_handler
-def add_new_comment(cursor, message, question_id):
+def add_new_comment(cursor, message, question_id, user_id):
     date_time = datetime.now()
     cursor.execute("""
                     INSERT INTO comment (submission_time, message, question_id) 
                     VALUES (%(date_time)s, %(message)s, %(question_id)s)
                     """,
                    {'date_time': date_time, 'message': message, 'question_id': question_id})
-
+    last_comment_id = get_last_comment_id()
+    cursor.execute("""
+                    INSERT INTO user_answer (comment_id, user_id)
+                    VALUES (%(last_comment_id)s, %(user_id)s)
+                    """,
+                   {'last_comment_id': last_comment_id['last_value'], 'user_id': user_id})
 
 @database_common.connection_handler
 def get_all_comments(cursor, question_id):
@@ -235,14 +250,19 @@ def get_all_comments_answer(cursor, answer_id):
 
 
 @database_common.connection_handler
-def add_new_comment_answer(cursor, message, answer_id):
+def add_new_comment_answer(cursor, message, answer_id, user_id):
     date_time = datetime.now()
     cursor.execute("""
                     INSERT INTO comment (submission_time, message, answer_id) 
                     VALUES (%(date_time)s, %(message)s, %(answer_id)s)
                     """,
                    {'date_time': date_time, 'message': message, 'answer_id': answer_id})
-
+    last_comment_id = get_last_comment_id()
+    cursor.execute("""
+                    INSERT INTO user_answer (comment_id, user_id)
+                    VALUES (%(last_comment_id)s, %(user_id)s)
+                    """,
+                   {'last_comment_id': last_comment_id['last_value'], 'user_id': user_id})
 
 @database_common.connection_handler
 def get_tag(cursor, question_id):
@@ -303,6 +323,22 @@ def get_last_question_id(cursor):
                     """)
     last_question_id = cursor.fetchone()
     return last_question_id
+
+@database_common.connection_handler
+def get_last_answer_id(cursor):
+    cursor.execute("""
+                    SELECT last_value FROM answer_id_seq;
+                    """)
+    last_answer_id = cursor.fetchone()
+    return last_answer_id
+
+@database_common.connection_handler
+def get_last_comment_id(cursor):
+    cursor.execute("""
+                    SELECT last_value FROM comment_id_seq;
+                    """)
+    last_comment_id = cursor.fetchone()
+    return last_comment_id
 
 
 @database_common.connection_handler
