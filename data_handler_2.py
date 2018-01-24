@@ -71,7 +71,7 @@ def get_questions_by_user(cursor, user_id):
 @database_common.connection_handler
 def get_answers_by_user(cursor, user_id):
     cursor.execute("""
-                    SELECT answer.id, answer.message, question.title
+                    SELECT answer.id, answer.message, question.title, question.id AS question_id
                     FROM answer
                     JOIN question ON (question_id = question.id)
                     JOIN user_answer ON (answer_id = answer.id)
@@ -86,7 +86,7 @@ def get_answers_by_user(cursor, user_id):
 @database_common.connection_handler
 def get_comments_by_user(cursor, user_id):
     cursor.execute("""
-                    SELECT comment.id, comment.message AS comment, question.title, answer.message
+                    SELECT comment.id, comment.message AS comment, question.title, answer.message, question.id AS question_id
                     FROM comment
                     FULL JOIN question ON (comment.question_id = question.id)
                     FULL JOIN answer ON (comment.answer_id = answer.id)
