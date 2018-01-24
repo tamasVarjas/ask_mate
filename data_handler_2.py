@@ -1,5 +1,4 @@
-import bcrypt
-import database_common
+import bcrypt, database_common
 
 
 def hash_password(plain_text_password):
@@ -38,3 +37,13 @@ def get_all_user_data(cursor):
     users = cursor.fetchall()
 
     return users
+
+@database_common.connection_handler
+def get_users_password(cursor, username):
+    cursor.execute("""
+                    SELECT password FROM users
+                    WHERE username = %(username)s;
+                   """,
+                {'username': username })
+    password = cursor.fetchone()
+    return password
