@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 {% extends "layout.html" %}
 {% block content %}
-<body align="center">
+
+<div align="center">
 <h1 style="color:darkblue">Welcome Tech-geeks!</h1>
 <h3>Official platform for the people, who want to share thought and dicuss questions about technology.</h3>
 
@@ -10,9 +11,17 @@
 <a href="/registration" class="button">Registration</a>
 <a href="/log_in" class="button">Sign In</a><br/><br/>
 
-<img src="http://www.tier3partners.com/wp-content/uploads/2016/06/technology-banner.jpg" height="360px" width="750" alt=""/>
-<form div="search" method="POST" action="/search_results">
+<img src="http://www.tier3partners.com/wp-content/uploads/2016/06/technology-banner.jpg"
+     height="360px" width="750" alt=""/>
+</div>
+<div id="small_button" align="center">
+<form method="POST" action="/search_results">
+  
 <input type="text" name="search_phrase">
 <input type="submit" value="Search">
+</form>
+<form><input type="button" value="Tags" onclick="window.location.href='/tags'" /></form>
+<form><input type="button" value="User list" onclick="window.location.href='/user-list'" /></form>
+</div>
 
 {% endblock %}
