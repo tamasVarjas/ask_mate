@@ -220,16 +220,9 @@ def registration():
         return render_template("log_in.html")
 
 
-@app.route('/user-list')
-def user_list():
-    users = data_handler_2.get_all_user_data()
-    return render_template('user_list.html', users=users)
-
-
 @app.route('/')
 def index_login():
     if 'username' in session:
-        print('Thanos')
         return 'Logged in as %s' % escape(session['username'])
     return 'You are not logged in'
 
@@ -255,6 +248,19 @@ def logout():
     session.pop('username', None)
     return redirect(url_for('index'))
 
+
+@app.route('/user-page/<int:user_id>')
+def user_page(user_id):
+    questions = data_handler_2.get_questions_by_user(user_id)
+    answers = data_handler_2.get_answers_by_user(user_id)
+    comments = data_handler_2.get_comments_by_user(user_id)
+    return render_template("user_page.html", questions=questions, answers=answers, comments=comments)
+
+
+@app.route('/user-list')
+def user_list():
+    users = data_handler_2.get_all_user_data()
+    return render_template('user_list.html', users=users)
 
 
 if __name__ == '__main__':
