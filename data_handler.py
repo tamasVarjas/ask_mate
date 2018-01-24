@@ -411,3 +411,16 @@ def get_comment_by_id(cursor, comment_id):
                    {'comment_id': comment_id})
     comment_id = cursor.fetchone()
     return comment_id
+
+@database_common.connection_handler
+def count_tags(cursor):
+    cursor.execute("""
+                    SELECT name, count(question_id)
+                    FROM tag
+                    JOIN question_tag ON id = tag_id
+                    WHERE name IS NOT NULL
+                    GROUP BY name;
+                    """)
+    tags = cursor.fetchall()
+    return tags
+
