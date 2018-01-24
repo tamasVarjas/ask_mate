@@ -1,5 +1,6 @@
 from flask import Flask, request, render_template, session, redirect, url_for, escape, request
-import data_handler, data_handler_2
+import data_handler
+import data_handler_2
 
 app = Flask(__name__)
 
