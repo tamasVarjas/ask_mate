@@ -197,6 +197,10 @@ def edit_answer_comment(answer_id, comment_id):
         data_handler.update_comment(comment_id, message)
         return redirect(url_for('answer_comment', answer_id=answer_id))
 
+@app.route('/tags')
+def number_of_tags():
+    tags = data_handler.count_tags()
+    return render_template("tags.html", tags=tags)
 
 @app.route('/registration', methods=["GET", "POST"])
 def registration():
