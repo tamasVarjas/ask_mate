@@ -4,8 +4,14 @@
 
 <div align="center">
 
-<h1 style="color:darkblue">Welcome Tech-geeks!</h1>
-<h3>Official platform for the people, who want to share thought and dicuss questions about technology.</h3>
+<h1 style="color:darkblue">Welcome
+{% if username == 'Anonymus' %}
+    Tech-geeks!
+{% else: %}
+    {{ username }}
+{% endif %}
+</h1>
+<h3>Official platform for the people, who want to share thoughts and discuss questions about technology.</h3>
 
 <a href="/table" class="button">Questions</a>
 <a href="/question/add_new_question" class="button">New question</a>
@@ -24,6 +30,6 @@
 <form><input type="button" value="Tags" onclick="window.location.href='/tags'" /></form>
 <form><input type="button" value="User list" onclick="window.location.href='/user-list'" /></form>
 </div>
-
+<h4 align="right"><a href="/logout">Log out</a></h4>
 {% endblock %}
 

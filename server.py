@@ -6,7 +6,8 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return render_template("main_page.html")
+    username = session['username'] if 'username' in session else 'Anonymus'
+    return render_template("main_page.html", username=username)
 
 
 @app.route('/table')
@@ -241,20 +242,28 @@ def log_in():
     else:
         username_check = request.form['username']
         password_check_input = request.form['password']
-        password_check_database = data_handler_2.get_users_password(username_check)['password']
-        verify = data_handler_2.verify_password(password_check_input, password_check_database)
-        if verify == True:
-            session['username'] = request.form['username']
-            return render_template('message.html', message='Succesfull log in', url=url_for('index'))
+        username = data_handler_2.get_all_username(username_check)
+
+        if username != None:
+            password_check_database = data_handler_2.get_users_password(username_check)['password']
+            verify = data_handler_2.verify_password(password_check_input, password_check_database)
+            if verify == True:
+                username = session['username'] = request.form['username']
+                return render_template('message.html', message='Successful log in as {0}'.format(username), url=url_for('index'))
+            else:
+                return render_template('message.html', message='You wrote wrong username or password',
+                                       url=url_for('log_in'))
         else:
-            return render_template('message.html', message='You wrote wrong username or password')
+            return render_template('message.html', message='You wrote wrong username or password', url=url_for('log_in'))
 
 
 @app.route('/logout')
 def logout():
-    session.pop('username', None)
-    return redirect(url_for('index'))
-
+    if 'username' not in session:
+        return render_template('message.html', message='You are not logged in, silly', url=url_for('log_in'))
+    else:
+        session.pop('username', None)
+        return render_template('message.html', message='Check out is successful', url=url_for('index'))
 
 
 if __name__ == '__main__':
