@@ -9,17 +9,17 @@
 
     <h1 align="center">Sign In</h1>
     <p align="center">If you have an account you can log in here, otherwise you can <a href="/registration">register</a>.</p>
-
+    <form action="/log_in" method="POST">
     <label><b>Username</b></label>
-    <input type="text" placeholder="Enter Username" name="username" required>
+    <input type="text" placeholder="Enter Username" name="username" id="username" required>
 
     <label><b>Password</b></label>
-    <input type="password" placeholder="Enter Password" name="psw" required>
+    <input type="password" placeholder="Enter Password" name="password" id="password" required>
 
     <label>
     <input type="checkbox" checked="checked" style="margin-bottom:15px"> Remember me
     </label><br/>
-    <form><input type="button" value="Cancel" onclick="window.location.href='/'" /></form>
-    <form align="center"><input type="button" value="Sign In" onclick="window.location.href='/'" /></form>
+    <input type="button" value="Cancel" onclick="window.location.href='/'" />
+    <button type="submit">Sign In</button></form>
 
 {% endblock %}

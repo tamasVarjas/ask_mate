@@ -41,6 +41,18 @@ def get_all_user_data(cursor):
 
     return users
 
+
+@database_common.connection_handler
+def get_users_password(cursor, username):
+    cursor.execute("""
+                    SELECT password FROM users
+                    WHERE username = %(username)s;
+                   """,
+                {'username': username })
+    password = cursor.fetchone()
+    
+    return password
+
   
 @database_common.connection_handler
 def get_questions_by_user(cursor, user_id):
@@ -85,3 +97,4 @@ def get_comments_by_user(cursor, user_id):
     comments = cursor.fetchall()
     
     return comments
+

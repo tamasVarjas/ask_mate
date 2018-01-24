@@ -1,5 +1,6 @@
-from flask import Flask, request, render_template, redirect, url_for
-import data_handler, data_handler_2
+from flask import Flask, request, render_template, session, redirect, url_for, escape, request
+import data_handler
+import data_handler_2
 
 app = Flask(__name__)
 
@@ -220,10 +221,33 @@ def registration():
         return render_template("log_in.html")
 
 
-@app.route('/log_in', methods=["GET", "POST"])
+@app.route('/')
+def index_login():
+    if 'username' in session:
+        return 'Logged in as %s' % escape(session['username'])
+    return 'You are not logged in'
+
+
+@app.route('/log_in', methods=['GET', 'POST'])
 def log_in():
     if request.method == 'GET':
         return render_template("log_in.html")
+    else:
+        username_check = request.form['username']
+        password_check_input = request.form['password']
+        password_check_database = data_handler_2.get_users_password(username_check)['password']
+        verify = data_handler_2.verify_password(password_check_input, password_check_database)
+        if verify == True:
+            session['username'] = request.form['username']
+            return render_template('message.html', message='Succesfull log in', url=url_for('index'))
+        else:
+            return render_template('message.html', message='You wrote wrong username or password')
+
+
+@app.route('/logout')
+def logout():
+    session.pop('username', None)
+    return redirect(url_for('index'))
 
 
 @app.route('/user-page/<int:user_id>')
@@ -241,4 +265,5 @@ def user_list():
 
 
 if __name__ == '__main__':
+    app.secret_key = 'superheroes'
     app.run(debug=True)
