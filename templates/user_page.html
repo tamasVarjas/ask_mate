@@ -40,7 +40,7 @@
     <br>
     {% endif %}
 
-    {% if comments != [] %}
+    {% if question_comments != [] %}
     <h2>User's comments to questions:</h2>
     <table class="table_user">
         <thead>
@@ -49,33 +49,31 @@
                 <th>Question title</th>
             </tr>
         </thead>
-        {% for comment in comments %}
-        {% if comment.title != None %}
+        {% for question_comment in question_comments %}
         <tr>
-            <td>{{ comment['comment'] }}</td>
-            <td><a href="{{ url_for('question_details', question_id=comment.question_id) }}">{{ comment['title'] }}</a></td>
+            <td>{{ question_comment['comment'] }}</td>
+            <td><a href="{{ url_for('question_details', question_id=question_comment.question_id) }}">{{ question_comment['title'] }}</a></td>
         </tr>
-        {% endif %}
         {% endfor %}
     </table>
     {% endif %}
 
-    {% if comments != [] %}
+    {% if answer_comments != [] %}
     <h2>User's comments to answers:</h2>
     <table class="table_user">
         <thead>
             <tr>
                 <th>Comment</th>
                 <th>Answer</th>
+                <th>Question title</th>
             </tr>
         </thead>
-        {% for comment in comments %}
-        {% if comment.message != None %}
-            <tr>
-            <td>{{ comment['comment'] }}</td>
-            <td>{{ comment['message'] }}</td>
+        {% for answer_comment in answer_comments %}
+        <tr>
+            <td>{{ answer_comment['comment'] }}</td>
+            <td>{{ answer_comment['message'] }}</td>
+             <td><a href="{{ url_for('question_details', question_id=answer_comment.question_id) }}">{{ answer_comment['title'] }}</a></td>
         </tr>
-        {% endif %}
         {% endfor %}
     </table>
     {% endif %}
