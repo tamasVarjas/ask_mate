@@ -1,5 +1,6 @@
 from flask import Flask, request, render_template, redirect, url_for
 import data_handler
+import data_handler_2
 
 app = Flask(__name__)
 
@@ -207,6 +208,13 @@ def registration():
 def log_in():
     if request.method == 'GET':
         return render_template("log_in.html")
+
+@app.route('/user-page/<int:user_id>')
+def user_page(user_id):
+    questions = data_handler_2.get_questions_by_user(user_id)
+    answers = data_handler_2.get_answers_by_user(user_id)
+    comments = data_handler_2.get_comments_by_user(user_id)
+    return render_template("user_page.html", questions=questions, answers=answers, comments=comments)
 
 if __name__ == '__main__':
     app.run(debug=True)
