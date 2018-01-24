@@ -208,6 +208,17 @@ def number_of_tags():
 def registration():
     if request.method == 'GET':
         return render_template("user_registration.html")
+    else:
+        username = request.form['username']
+        image = request.form['image']
+        password = request.form['password']
+        hashed_password = data_handler_2.hash_password(password)
+        if len(image) < 5:
+            data_handler_2.save_registration_without_image(username,hashed_password)
+        else:
+            data_handler_2.save_registration(username, hashed_password, image)
+        return render_template("log_in.html")
+
 
 
 @app.route('/log_in', methods=["GET", "POST"])
