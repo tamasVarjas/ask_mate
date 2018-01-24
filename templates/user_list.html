@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+{% extends "layout.html" %}
+{% block content %}
+
+<h1>User list</h1>
+<p align="center">Find below the list of all currently registered users!</p><br>
+
+<table align="center">
+    <tr>
+        <th>Username</th>
+        <th>Profile image</th>
+    </tr>
+    {% for user in users %}
+    <tr>
+        <td>{{ user.username }}</td>
+        <td><img class="prof-pic" src="{{ user.image }}"></td>
+    </tr>
+    {% endfor %}
+</table>
+<br>
+<form align="center">
+        <input type="button" value="Get back" onclick="window.location.href='/'" />
+</form>
+
+{% endblock %}
+</html>

@@ -1,5 +1,5 @@
 from flask import Flask, request, render_template, redirect, url_for
-import data_handler
+import data_handler, data_handler_2
 
 app = Flask(__name__)
 
@@ -197,20 +197,30 @@ def edit_answer_comment(answer_id, comment_id):
         data_handler.update_comment(comment_id, message)
         return redirect(url_for('answer_comment', answer_id=answer_id))
 
+
 @app.route('/tags')
 def number_of_tags():
     tags = data_handler.count_tags()
     return render_template("tags.html", tags=tags)
+
 
 @app.route('/registration', methods=["GET", "POST"])
 def registration():
     if request.method == 'GET':
         return render_template("user_registration.html")
 
+
 @app.route('/log_in', methods=["GET", "POST"])
 def log_in():
     if request.method == 'GET':
         return render_template("log_in.html")
+
+
+@app.route('/user-list')
+def user_list():
+    users = data_handler_2.get_all_user_data()
+    return render_template('user_list.html', users=users)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
