@@ -160,6 +160,8 @@ def answer_comment(answer_id):
 def find_search_results():
     form_data = request.form.to_dict()
     search_phrase = form_data['search_phrase']
+    if search_phrase == '':
+        search_phrase = ' '
 
     return redirect(url_for('show_search_results', search_phrase=search_phrase))
 
