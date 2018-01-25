@@ -8,7 +8,11 @@ app = Flask(__name__)
 @app.route('/')
 def index():
     username = session['username'] if 'username' in session else 'Anonymus'
-    return render_template("main_page.html", username=username)
+    if username != 'Anonymus':
+        image = data_handler_2.get_users_image(username)['image']
+        return render_template("main_page.html", username=username, image=image)
+    else:
+        return render_template("main_page.html", username=username)
 
 
 @app.route('/table')
@@ -212,21 +216,18 @@ def registration():
         return render_template("user_registration.html")
     else:
         username = request.form['username']
-        image = request.form['image']
-        password = request.form['password']
-        hashed_password = data_handler_2.hash_password(password)
-        if len(image) < 5:
-            data_handler_2.save_registration_without_image(username, hashed_password)
+        every_username = data_handler_2.get_all_username(username)
+        if username != every_username:
+            image = request.form['image']
+            password = request.form['password']
+            hashed_password = data_handler_2.hash_password(password)
+            if len(image) < 5:
+                data_handler_2.save_registration_without_image(username, hashed_password)
+            else:
+                data_handler_2.save_registration(username, hashed_password, image)
+            return render_template("log_in.html")
         else:
-            data_handler_2.save_registration(username, hashed_password, image)
-        return render_template("log_in.html")
-
-
-@app.route('/')
-def index_login():
-    if 'username' in session:
-        return 'Logged in as %s' % escape(session['username'])
-    return 'You are not logged in'
+            return render_template('message.html', message='Username already taken', url=url_for('registration'))
 
 
 @app.route('/log_in', methods=['GET', 'POST'])

@@ -3,20 +3,28 @@
 {% block content %}
 
 <div align="center">
-
 <h1 style="color:darkblue">Welcome
 {% if username == 'Anonymus' %}
     Tech-geeks!
 {% else: %}
-    {{ username }}
+    {{ username }}!
+    <img src="{{ image }}" align="right" width="150" height="150"><br/>
+
 {% endif %}
 </h1>
 <h3>Official platform for people who want to share thoughts and discuss questions about technology.</h3>
 
+
 <a href="/table" class="button">Questions</a>
-<a href="/question/add_new_question" class="button">New question</a>
-<a href="/registration" class="button">Registration</a>
-<a href="/log_in" class="button">Sign In</a><br/><br/>
+{% if username != 'Anonymus' %}
+    <a href="/question/add_new_question" class="button">New Question</a>
+    <a href="/user-page/" class="button">Your Page</a>
+    <a href="/user-list" class="button">Users</a><br/>
+{% else %}
+    <a href="/registration" class="button">Registration</a>
+    <a href="/log_in" class="button">Sign In</a><br/>
+{% endif %}
+
 
 <img src="http://www.tier3partners.com/wp-content/uploads/2016/06/technology-banner.jpg"
      height="360px" width="750" alt=""/>
@@ -28,7 +36,9 @@
 <input type="submit" value="Search">
 </form>
 <form><input type="button" value="Tags" onclick="window.location.href='/tags'" /></form>
-<form><input type="button" value="User list" onclick="window.location.href='/user-list'" /></form>
 </div>
+{% if username != 'Anonymus' %}
 <h4 align="right"><a href="/logout">Log out</a></h4>
+{% endif %}
+
 {% endblock %}
