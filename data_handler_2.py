@@ -53,6 +53,18 @@ def get_users_password(cursor, username):
     password = cursor.fetchone()
 
     return password
+  
+
+@database_common.connection_handler
+def get_all_username(cursor, username):
+    cursor.execute("""
+                    SELECT username FROM users
+                    WHERE username = %(username)s;
+                   """,
+                {'username': username })
+    username_search = cursor.fetchone()
+    
+    return username_search
 
 
 @database_common.connection_handler
