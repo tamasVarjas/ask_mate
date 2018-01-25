@@ -224,7 +224,7 @@ def registration():
     else:
         username = request.form['username']
         every_username = data_handler_2.get_all_username(username)
-        if username != every_username:
+        if username != every_username['username']:
             image = request.form['image']
             password = request.form['password']
             hashed_password = data_handler_2.hash_password(password)
