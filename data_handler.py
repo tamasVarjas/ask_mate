@@ -317,8 +317,9 @@ def get_last_tag_id(cursor):
 @database_common.connection_handler
 def get_all_tags(cursor):
     cursor.execute("""
-                    SELECT name FROM tag;
-                    """)
+                    SELECT name FROM tag
+                    ORDER BY tag ASC;
+                   """)
     tags = cursor.fetchall()
     return tags
 
