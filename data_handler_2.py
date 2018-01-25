@@ -56,7 +56,7 @@ def get_users_password(cursor, username):
   
 
 @database_common.connection_handler
-def get_all_username(cursor, username):
+def check_name_in_database(cursor, username):
     cursor.execute("""
                     SELECT username FROM users
                     WHERE username = %(username)s;
