@@ -5,8 +5,8 @@ body {
     left top;
     background-repeat: no-repeat,
     no-repeat;
-    background-size: 1200px 200px,
-    200px 200px;
+    background-size: 80% 200px,
+    12% auto;
     background-color: #eaebe9;
     color: #111113;
 }
@@ -90,3 +90,19 @@ a.button {
     border: 1px solid white;
     padding: 5px;
 }
+
+#main_img {
+    max-width: 75%;
+    height: auto;
+}
+
+.question-link {
+    text-decoration: none;
+    color: black;
+}
+
+.question-link:hover {
+    background-color: darkblue;
+    color: white;
+}
+
