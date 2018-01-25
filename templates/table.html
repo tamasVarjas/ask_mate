@@ -12,7 +12,7 @@
     {% for question_detail in info %}
     <tr>
         <td>{{ question_detail['id'] }}</td>
-        <td>{{ question_detail['title'] }}</td>
+        <td><a href="{{ url_for('question_details', question_id=question_detail['id']) }}" class="question-link">{{ question_detail['title'] }}</a></td>
         <td>{{ question_detail['view_number'] }}</td>
         <td>{{ question_detail['vote_number'] }}</td>
         <td>
@@ -23,8 +23,14 @@
     {% endfor %}
 </table>
 <br/>
+{% if username != 'Anonymus' %}
 <form method="get" action="/question/add_new_question">
     <button type="submit">Ask something clever!</button>
+</form>
+{% endif %}
+<br>
+<form align="center">
+        <input type="button" value="Get back" onclick="window.location.href='/'" />
 </form>
 
 {% endblock %}

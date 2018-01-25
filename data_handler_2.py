@@ -56,7 +56,7 @@ def get_users_password(cursor, username):
   
 
 @database_common.connection_handler
-def get_all_username(cursor, username):
+def check_name_in_database(cursor, username):
     cursor.execute("""
                     SELECT username FROM users
                     WHERE username = %(username)s;
@@ -128,3 +128,83 @@ def get_answer_comments_by_user(cursor, user_id):
     answer_comments = cursor.fetchall()
 
     return answer_comments
+
+
+@database_common.connection_handler
+def get_users_image(cursor, username):
+    cursor.execute("""
+                    SELECT image FROM users
+                    WHERE username = %(username)s;
+                   """,
+                   {'username': username})
+    image = cursor.fetchone()
+
+    return image
+
+@database_common.connection_handler
+def get_id_by_username(cursor, username):
+    cursor.execute("""
+                    SELECT id FROM users
+                    WHERE username = %(username)s;
+                    """,
+                   {'username': username})
+    id = cursor.fetchone()
+
+    return id
+
+@database_common.connection_handler
+def get_profile_by_question_id(cursor, question_id):
+    cursor.execute("""
+                    SELECT username, image 
+                    FROM users
+                    JOIN user_question ON (user_id = users.id)
+                    WHERE question_id = %(question_id)s;
+                    """,
+                   {'question_id': question_id})
+    profile = cursor.fetchone()
+
+    return profile
+
+
+@database_common.connection_handler
+def get_answer_profile_by_question_id(cursor, question_id):
+    cursor.execute("""
+                    SELECT users.username, users.image 
+                    FROM users
+                    JOIN user_answer ON (user_id = users.id)
+                    JOIN answer ON (answer_id = answer.id)
+                    WHERE question_id = %(question_id)s
+                    GROUP BY users.username, users.image;
+                    """,
+                   {'question_id': question_id})
+    profile = cursor.fetchall()
+
+    return profile
+
+@database_common.connection_handler
+def get_comment_answer_profile_by_answer_id(cursor, answer_id):
+    cursor.execute("""
+                    SELECT users.username, users.image 
+                    FROM users
+                    JOIN user_comment ON (user_id = users.id)
+                    JOIN comment ON (comment_id = comment.id)
+                    WHERE comment.answer_id = %(answer_id)s;
+                    """,
+                   {'answer_id': answer_id})
+    profile = cursor.fetchall()
+
+    return profile
+
+@database_common.connection_handler
+def get_comment_answer_profile_by_question_id(cursor, question_id):
+    cursor.execute("""
+                    SELECT users.username, users.image 
+                    FROM users
+                    JOIN user_comment ON (user_id = users.id)
+                    JOIN comment ON (comment_id = comment.id)
+                    WHERE comment.question_id = %(question_id)s;
+                    """,
+                   {'question_id': question_id})
+    profile = cursor.fetchall()
+
+    return profile

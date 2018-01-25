@@ -8,13 +8,19 @@ app = Flask(__name__)
 @app.route('/')
 def index():
     username = session['username'] if 'username' in session else 'Anonymus'
-    return render_template("main_page.html", username=username)
+    if username != 'Anonymus':
+        image = data_handler_2.get_users_image(username)['image']
+        id = data_handler_2.get_id_by_username(username)['id']
+        return render_template("main_page.html", username=username, image=image, id=id)
+    else:
+        return render_template("main_page.html", username=username)
 
 
 @app.route('/table')
 def table():
+    username = session['username'] if 'username' in session else 'Anonymus'
     info = data_handler.get_all_data('question')
-    return render_template("table.html", info=info)
+    return render_template("table.html", info=info, username=username)
 
 
 @app.route('/question/add_new_question', methods=['GET', 'POST'])
@@ -27,7 +33,8 @@ def add_new_question():
         message = request.form["message"]
         image = request.form["image"]
         tag = request.form["tag"]
-        data_handler.add_new_question(title, message, image, tag)
+        username = session['username']
+        data_handler.add_new_question(title, message, image, tag, username)
         return redirect("/")
 
 
@@ -35,21 +42,23 @@ def add_new_question():
 def question_details(question_id):
     info = data_handler.get_question_by_id(question_id)
     info_tag = data_handler.get_tag(question_id)
+    profile_question = data_handler_2.get_profile_by_question_id(question_id)
     question_data = info[0]['title']
     detail_data = info[0]['message']
     picture_data = info[0]['image']
     view_number = info[0]['view_number']
     popular_number = info[0]['vote_number']
     tag = info_tag['name']
+    username = session['username'] if 'username' in session else 'Anonymus'
     answers = data_handler.get_answers_by_question_id(question_id)
     if request.method == 'GET':
         view_number += 1
         info[0]['view_number'] = view_number
         data_handler.update_view_number(view_number, question_id)
     return render_template("question.html", question_id=question_id, question_data=question_data,
-                           detail_data=detail_data,
+                           detail_data=detail_data, profile_question=profile_question,
                            picture_data=picture_data, view_number=view_number, popular_number=popular_number,
-                           tag=tag, answers=answers)
+                           tag=tag, answers=answers, username=username)
 
 
 @app.route('/like/<int:question_id>', methods=["GET"])
@@ -79,7 +88,8 @@ def not_so_popular(question_id):
 @app.route("/question/add_new_answer/<int:question_id>", methods=['GET', 'POST'])
 def add_new_answer(question_id):
     answer = request.form["answer"]
-    data_handler.add_new_answer(answer, question_id)
+    username = session['username']
+    data_handler.add_new_answer(answer, question_id, username)
     return redirect(url_for('question_details', question_id=question_id))
 
 
@@ -133,7 +143,8 @@ def question_comment(question_id):
         return render_template("comment.html", question_id=question_id, comments=comments)
     else:
         comment = request.form["comment"]
-        data_handler.add_new_comment(comment, question_id)
+        username = session['username']
+        data_handler.add_new_comment(comment, question_id, username)
         comments = data_handler.get_all_comments(question_id)
         return render_template("comment.html", question_id=question_id, comments=comments)
 
@@ -146,7 +157,8 @@ def answer_comment(answer_id):
         return render_template("comment_answer.html", answer_id=answer_id, comments=comments, question_id=question_id)
     else:
         comment_answer = request.form["comment"]
-        data_handler.add_new_comment_answer(comment_answer, answer_id)
+        username = session['username']
+        data_handler.add_new_comment_answer(comment_answer, answer_id, username)
         comments = data_handler.get_all_comments_answer(answer_id)
         question_id = data_handler.get_question_id_by_answer_id(answer_id)
         return render_template("comment_answer.html", answer_id=answer_id, comments=comments, question_id=question_id)
@@ -156,6 +168,8 @@ def answer_comment(answer_id):
 def find_search_results():
     form_data = request.form.to_dict()
     search_phrase = form_data['search_phrase']
+    if search_phrase == '':
+        search_phrase = ' '
 
     return redirect(url_for('show_search_results', search_phrase=search_phrase))
 
@@ -212,21 +226,18 @@ def registration():
         return render_template("user_registration.html")
     else:
         username = request.form['username']
-        image = request.form['image']
-        password = request.form['password']
-        hashed_password = data_handler_2.hash_password(password)
-        if len(image) < 5:
-            data_handler_2.save_registration_without_image(username, hashed_password)
+        is_in_database = data_handler_2.check_name_in_database(username)
+        if is_in_database is None:
+            image = request.form['image']
+            password = request.form['password']
+            hashed_password = data_handler_2.hash_password(password)
+            if len(image) < 5:
+                data_handler_2.save_registration_without_image(username, hashed_password)
+            else:
+                data_handler_2.save_registration(username, hashed_password, image)
+            return render_template("log_in.html")
         else:
-            data_handler_2.save_registration(username, hashed_password, image)
-        return render_template("log_in.html")
-
-
-@app.route('/')
-def index_login():
-    if 'username' in session:
-        return 'Logged in as %s' % escape(session['username'])
-    return 'You are not logged in'
+            return render_template('message.html', message='Username already taken', url=url_for('registration'))
 
 
 @app.route('/log_in', methods=['GET', 'POST'])

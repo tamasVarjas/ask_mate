@@ -1,23 +1,29 @@
 <!DOCTYPE html>
+
 {% extends "layout.html" %}
 {% block content %}<br/><br/>
-<form action="/question/add_new_question" , method="POST">
+
+<form action="/question/add_new_question" method="POST">
     <label for="title">Give me your question, pal:</label><br/>
-    <input id="title" , name="title" type="text"> <br/>
+    <input id="title" name="title" type="text"><br/><br/>
     <label for="message">Put here some fancy description about your topic:</label><br/>
-    <textarea id="message" , name="message"></textarea><br/>
+    <textarea id="message" name="message"></textarea><br/><br/>
     <label>You can put here some picture link:</label><br/>
-    <input id="image" , name="image" type="text"> <br/>
+    <input id="image" name="image" type="text"><br/><br/>
     <label>You can choose a tag here:</label><br/>
     <input list="tags" name="tag">
     <datalist id="tags">
         {% for tag in tags %}
         <option value="{{ tag['name'] }}">
-            {% endfor %}
+        {% endfor %}
     </datalist><br/><br/>
-    <button type="submit">Let it out to the world!</button><br/>
-<form method="get" action="/question/{{name}}">
-    <button type="submit">Get Back</button>
+    <button type="submit">Let it out to the world!</button>
 </form>
+<br/>
+<br/>
+<form>
+    <input type="button" value="Get back" onclick="window.location.href='/'" />
 </form>
+
+
 {% endblock %}
