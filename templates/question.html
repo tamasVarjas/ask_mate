@@ -76,7 +76,7 @@
         <td>{{ answer ['vote_number'] }}</td>
         {% if username != 'Anonymus' %}
         <td>
-            <form method="get" action="/answer_edit/{{ question_id }}/{{ answer['id'] }}">
+            <form method="get" action="/answer_edit/{{ question_id }}/{{ answer['answer_id'] }}">
                 <button type="submit">Edit</button>
             </form>
         </td>
