@@ -128,3 +128,14 @@ def get_answer_comments_by_user(cursor, user_id):
     answer_comments = cursor.fetchall()
 
     return answer_comments
+
+@database_common.connection_handler
+def get_id_by_username(cursor, username):
+    cursor.execute("""
+                    SELECT id FROM users
+                    WHERE username = %(username)s;
+                    """,
+                   {'username': username})
+    id = cursor.fetchone()
+
+    return id
