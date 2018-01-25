@@ -67,16 +67,16 @@
         <td><img class="prof-pic" src="{{ answer ['user_picture'] }}"></td>
         <td bgcolor="black" style="color:white"># {{ answer ['username'] }}</td>
         <td align="justify">{{ answer ['message'] }}</td>
-        <td><a href="/answer_like/{{ question_id }}/{{ answer['id'] }}"><img border="0" alt="Like"
+        <td><a href="/answer_like/{{ question_id }}/{{ answer['answer_id'] }}"><img border="0" alt="Like"
                                                                              src="http://clipart.info/images/ccovers/1484772654black-heart-png-clipart-image-free.png"
                                                                              height="25"></td>
-        <td><a href="/answer_dislike/{{ question_id }}/{{ answer['id'] }}"><img border="0" alt="Hate"
+        <td><a href="/answer_dislike/{{ question_id }}/{{ answer['answer_id'] }}"><img border="0" alt="Hate"
                                                                                 src="http://cliparting.com/wp-content/uploads/2016/11/Heart-black-and-white-broken-heart-clipart-black-and-white-free-image.png"
                                                                                 height="20"></a><br/></td>
         <td>{{ answer ['vote_number'] }}</td>
         {% if username != 'Anonymus' %}
         <td>
-            <form method="get" action="/answer_edit/{{ question_id }}/{{ answer['id'] }}">
+            <form method="get" action="/answer_edit/{{ question_id }}/{{ answer['answer_id'] }}">
                 <button type="submit">Edit</button>
             </form>
         </td>
