@@ -31,7 +31,8 @@ def add_new_question():
         message = request.form["message"]
         image = request.form["image"]
         tag = request.form["tag"]
-        data_handler.add_new_question(title, message, image, tag)
+        username = session['username']
+        data_handler.add_new_question(title, message, image, tag, username)
         return redirect("/")
 
 
@@ -83,7 +84,8 @@ def not_so_popular(question_id):
 @app.route("/question/add_new_answer/<int:question_id>", methods=['GET', 'POST'])
 def add_new_answer(question_id):
     answer = request.form["answer"]
-    data_handler.add_new_answer(answer, question_id)
+    username = session['username']
+    data_handler.add_new_answer(answer, question_id, username)
     return redirect(url_for('question_details', question_id=question_id))
 
 
@@ -137,7 +139,8 @@ def question_comment(question_id):
         return render_template("comment.html", question_id=question_id, comments=comments)
     else:
         comment = request.form["comment"]
-        data_handler.add_new_comment(comment, question_id)
+        username = session['username']
+        data_handler.add_new_comment(comment, question_id, username)
         comments = data_handler.get_all_comments(question_id)
         return render_template("comment.html", question_id=question_id, comments=comments)
 
@@ -150,7 +153,8 @@ def answer_comment(answer_id):
         return render_template("comment_answer.html", answer_id=answer_id, comments=comments, question_id=question_id)
     else:
         comment_answer = request.form["comment"]
-        data_handler.add_new_comment_answer(comment_answer, answer_id)
+        username = session['username']
+        data_handler.add_new_comment_answer(comment_answer, answer_id, username)
         comments = data_handler.get_all_comments_answer(answer_id)
         question_id = data_handler.get_question_id_by_answer_id(answer_id)
         return render_template("comment_answer.html", answer_id=answer_id, comments=comments, question_id=question_id)
@@ -160,6 +164,8 @@ def answer_comment(answer_id):
 def find_search_results():
     form_data = request.form.to_dict()
     search_phrase = form_data['search_phrase']
+    if search_phrase == '':
+        search_phrase = ' '
 
     return redirect(url_for('show_search_results', search_phrase=search_phrase))
 

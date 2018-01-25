@@ -140,3 +140,14 @@ def get_users_image(cursor, username):
     image = cursor.fetchone()
 
     return image
+
+@database_common.connection_handler
+def get_id_by_username(cursor, username):
+    cursor.execute("""
+                    SELECT id FROM users
+                    WHERE username = %(username)s;
+                    """,
+                   {'username': username})
+    id = cursor.fetchone()
+
+    return id
