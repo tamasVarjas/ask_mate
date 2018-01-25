@@ -135,13 +135,16 @@ def get_question_by_id(cursor, question_id):
 
 
 @database_common.connection_handler
-def get_answers_by_question_id(cursor, name):
+def get_answers_by_question_id(cursor, question_id):
     cursor.execute("""
-                    SELECT * FROM answer
-                    WHERE question_id = %(question_id)s
-                    ORDER BY id ASC;
+                    SELECT users.username, users.image as user_picture, answer.id as answer_id, vote_number, message
+                    FROM answer
+                    JOIN user_answer ON (user_answer.answer_id = answer.id)
+                    JOIN users ON (user_answer.user_id = users.id)
+                    WHERE answer.question_id = %(question_id)s
+                    GROUP BY users.username, users.image, answer.id;
                     """,
-                   {'question_id': name})
+                   {'question_id': question_id})
     answer_to_question = cursor.fetchall()
     return answer_to_question
 
@@ -205,23 +208,18 @@ def add_new_comment(cursor, message, question_id, username):
 
 @database_common.connection_handler
 def get_all_comments(cursor, question_id):
-    header = ['id', 'message', 'submission_time']
     cursor.execute("""
-                    SELECT * FROM comment
-                    WHERE question_id = %(question_id)s;
+                    SELECT comment.id, question_id, message, submission_time, edited_count, users.username, users.image AS user_picture
+                    FROM comment
+                    JOIN user_comment ON (user_comment.comment_id = comment.id)
+                    JOIN users ON (user_comment.user_id = users.id)
+                    WHERE comment.question_id = %(question_id)s
+                    GROUP BY users.username, users.image, comment.id;
                     """,
                    {'question_id': question_id})
     comments = cursor.fetchall()
-    rows = [
-        [1, ]
-    ]
 
-    for dict_row in comments:
-        rows.append([])
-        for column_name in header:
-            rows[len(rows) - 1].append(dict_row[column_name])
-    return rows
-
+    return comments
 
 @database_common.connection_handler
 def delete_line(cursor, edit_id):
@@ -234,22 +232,18 @@ def delete_line(cursor, edit_id):
 
 @database_common.connection_handler
 def get_all_comments_answer(cursor, answer_id):
-    header = ['id', 'message', 'submission_time']
     cursor.execute("""
-                    SELECT * FROM comment
-                    WHERE answer_id = %(answer_id)s;
+                    SELECT comment.id, answer_id, message, submission_time, edited_count, users.username, users.image AS user_picture
+                    FROM comment
+                    JOIN user_comment ON (user_comment.comment_id = comment.id)
+                    JOIN users ON (user_comment.user_id = users.id)
+                    WHERE comment.answer_id = %(answer_id)s
+                    GROUP BY users.username, users.image, comment.id;
                     """,
                    {'answer_id': answer_id})
     comments = cursor.fetchall()
-    rows = [
-        [1, ]
-    ]
 
-    for dict_row in comments:
-        rows.append([])
-        for column_name in header:
-            rows[len(rows) - 1].append(dict_row[column_name])
-    return rows
+    return comments
 
 
 @database_common.connection_handler

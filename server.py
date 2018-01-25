@@ -37,6 +37,7 @@ def add_new_question():
 def question_details(question_id):
     info = data_handler.get_question_by_id(question_id)
     info_tag = data_handler.get_tag(question_id)
+    profile_question = data_handler_2.get_profile_by_question_id(question_id)
     question_data = info[0]['title']
     detail_data = info[0]['message']
     picture_data = info[0]['image']
@@ -50,9 +51,9 @@ def question_details(question_id):
         info[0]['view_number'] = view_number
         data_handler.update_view_number(view_number, question_id)
     return render_template("question.html", question_id=question_id, question_data=question_data,
-                           detail_data=detail_data,
+                           detail_data=detail_data, profile_question=profile_question,
                            picture_data=picture_data, view_number=view_number, popular_number=popular_number,
-                           tag=tag, answers=answers, username = username)
+                           tag=tag, answers=answers, username=username)
 
 
 @app.route('/like/<int:question_id>', methods=["GET"])
