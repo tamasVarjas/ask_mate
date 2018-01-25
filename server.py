@@ -17,8 +17,9 @@ def index():
 
 @app.route('/table')
 def table():
+    username = session['username'] if 'username' in session else 'Anonymus'
     info = data_handler.get_all_data('question')
-    return render_template("table.html", info=info)
+    return render_template("table.html", info=info, username=username)
 
 
 @app.route('/question/add_new_question', methods=['GET', 'POST'])
@@ -40,21 +41,23 @@ def add_new_question():
 def question_details(question_id):
     info = data_handler.get_question_by_id(question_id)
     info_tag = data_handler.get_tag(question_id)
+    profile_question = data_handler_2.get_profile_by_question_id(question_id)
     question_data = info[0]['title']
     detail_data = info[0]['message']
     picture_data = info[0]['image']
     view_number = info[0]['view_number']
     popular_number = info[0]['vote_number']
     tag = info_tag['name']
+    username = session['username'] if 'username' in session else 'Anonymus'
     answers = data_handler.get_answers_by_question_id(question_id)
     if request.method == 'GET':
         view_number += 1
         info[0]['view_number'] = view_number
         data_handler.update_view_number(view_number, question_id)
     return render_template("question.html", question_id=question_id, question_data=question_data,
-                           detail_data=detail_data,
+                           detail_data=detail_data, profile_question=profile_question,
                            picture_data=picture_data, view_number=view_number, popular_number=popular_number,
-                           tag=tag, answers=answers)
+                           tag=tag, answers=answers, username=username)
 
 
 @app.route('/like/<int:question_id>', methods=["GET"])
