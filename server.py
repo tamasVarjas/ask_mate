@@ -10,7 +10,8 @@ def index():
     username = session['username'] if 'username' in session else 'Anonymus'
     if username != 'Anonymus':
         image = data_handler_2.get_users_image(username)['image']
-        return render_template("main_page.html", username=username, image=image)
+        id = data_handler_2.get_id_by_username(username)['id']
+        return render_template("main_page.html", username=username, image=image, id=id)
     else:
         return render_template("main_page.html", username=username)
 
