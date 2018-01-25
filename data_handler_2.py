@@ -4,13 +4,13 @@ import database_common
 
 def hash_password(plain_text_password):
     hashed_bytes = bcrypt.hashpw(plain_text_password.encode('utf-8'), bcrypt.gensalt())
-    
+
     return hashed_bytes.decode('utf-8')
 
 
 def verify_password(plain_text_password, hashed_password):
     hashed_bytes_password = hashed_password.encode('utf-8')
-    
+
     return bcrypt.checkpw(plain_text_password.encode('utf-8'), hashed_bytes_password)
 
 
@@ -21,6 +21,7 @@ def save_registration(cursor, username, password, image):
                     VALUES (%(username)s, %(password)s, %(image)s);
                    """,
                    {'username': username, 'password': password, 'image': image})
+
 
 @database_common.connection_handler
 def save_registration_without_image(cursor, username, password):
@@ -48,9 +49,11 @@ def get_users_password(cursor, username):
                     SELECT password FROM users
                     WHERE username = %(username)s;
                    """,
-                {'username': username })
+                   {'username': username})
     password = cursor.fetchone()
+
     return password
+  
 
 @database_common.connection_handler
 def get_all_username(cursor, username):
@@ -60,10 +63,10 @@ def get_all_username(cursor, username):
                    """,
                 {'username': username })
     username_search = cursor.fetchone()
+    
     return username_search
 
 
-  
 @database_common.connection_handler
 def get_questions_by_user(cursor, user_id):
     cursor.execute("""
@@ -74,14 +77,14 @@ def get_questions_by_user(cursor, user_id):
                    """,
                    {'user_id': user_id})
     questions = cursor.fetchall()
-    
+
     return questions
- 
+
 
 @database_common.connection_handler
 def get_answers_by_user(cursor, user_id):
     cursor.execute("""
-                    SELECT answer.id, answer.message, question.title
+                    SELECT answer.id, answer.message, question.title, question.id AS question_id
                     FROM answer
                     JOIN question ON (question_id = question.id)
                     JOIN user_answer ON (answer_id = answer.id)
@@ -89,22 +92,39 @@ def get_answers_by_user(cursor, user_id):
                    """,
                    {'user_id': user_id})
     answers = cursor.fetchall()
-    
+
     return answers
 
 
 @database_common.connection_handler
-def get_comments_by_user(cursor, user_id):
+def get_question_comments_by_user(cursor, user_id):
     cursor.execute("""
-                    SELECT comment.id, comment.message AS comment, question.title, answer.message
+                    SELECT comment.id, comment.message AS comment, question.title, question.id AS question_id
                     FROM comment
-                    FULL JOIN question ON (comment.question_id = question.id)
-                    FULL JOIN answer ON (comment.answer_id = answer.id)
+                    
+                    JOIN question ON (comment.question_id = question.id)
                     JOIN user_comment ON (comment_id = comment.id)
                     WHERE user_id = %(user_id)s; 
                    """,
                    {'user_id': user_id})
-    comments = cursor.fetchall()
-    
-    return comments
+    question_comments = cursor.fetchall()
 
+    return question_comments
+
+
+@database_common.connection_handler
+def get_answer_comments_by_user(cursor, user_id):
+    cursor.execute("""
+                    SELECT comment.id, comment.message AS comment,
+                    answer.message,
+                    question.id AS question_id, question.title AS title
+                    FROM comment
+                    FULL JOIN answer ON (comment.answer_id = answer.id)
+                    INNER JOIN question ON (answer.question_id = question.id)
+                    JOIN user_comment ON (comment_id = comment.id)
+                    WHERE user_id = %(user_id)s; 
+                   """,
+                   {'user_id': user_id})
+    answer_comments = cursor.fetchall()
+
+    return answer_comments

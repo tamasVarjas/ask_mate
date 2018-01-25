@@ -216,7 +216,7 @@ def registration():
         password = request.form['password']
         hashed_password = data_handler_2.hash_password(password)
         if len(image) < 5:
-            data_handler_2.save_registration_without_image(username,hashed_password)
+            data_handler_2.save_registration_without_image(username, hashed_password)
         else:
             data_handler_2.save_registration(username, hashed_password, image)
         return render_template("log_in.html")
@@ -263,8 +263,10 @@ def logout():
 def user_page(user_id):
     questions = data_handler_2.get_questions_by_user(user_id)
     answers = data_handler_2.get_answers_by_user(user_id)
-    comments = data_handler_2.get_comments_by_user(user_id)
-    return render_template("user_page.html", questions=questions, answers=answers, comments=comments)
+    question_comments = data_handler_2.get_question_comments_by_user(user_id)
+    answer_comments = data_handler_2.get_answer_comments_by_user(user_id)
+    return render_template("user_page.html", questions=questions, answers=answers, question_comments=question_comments,
+                           answer_comments=answer_comments)
 
 
 @app.route('/user-list')
