@@ -222,8 +222,8 @@ def registration():
         return render_template("user_registration.html")
     else:
         username = request.form['username']
-        every_username = data_handler_2.get_all_username(username)
-        if username != every_username['username']:
+        is_in_database = data_handler_2.check_name_in_database(username)
+        if is_in_database is None:
             image = request.form['image']
             password = request.form['password']
             hashed_password = data_handler_2.hash_password(password)
