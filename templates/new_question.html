@@ -17,11 +17,13 @@
         <option value="{{ tag['name'] }}">
         {% endfor %}
     </datalist><br/><br/>
-    <button type="submit">Let it out to the world!</button><br/>
-    <br/>
-    <form method="get" action="/question/{{name}}">
-        <button type="submit">Get Back</button>
-    </form>
+    <button type="submit">Let it out to the world!</button>
 </form>
+<br/>
+<br/>
+<form>
+    <input type="button" value="Get back" onclick="window.location.href='/'" />
+</form>
+
 
 {% endblock %}
