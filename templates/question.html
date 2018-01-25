@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
+{% extends "layout.html" %}
+{% block content %}
 <head>
     <meta charset="UTF-8">
     <title>Question</title>
@@ -10,31 +12,37 @@
 <img src="{{picture_data}}" height="405px" alt=""><br/>
 <table align="center" height="100px" width="340px" border="1">
     <tr>
+        <td><img class="prof-pic" src="{{ profile_question['image'] }}"></td>
         <td colspan="3" align="justify"><strong>Question details:</strong> {{detail_data}}</td>
     </tr>
     <tr>
+        <td><strong>{{ profile_question['username'] }}</strong></td>
         <td>View number: {{ view_number }}</td>
         <td>Popularity: {{ popular_number }}</td>
-        <td>
-            <form method="get" action="/comment/{{ question_id }}">
-                <button type="submit">Comment</button>
-            </form>
-        </td>
+            {% if username != 'Anonymus' %}
+                <td>
+                    <form method="get" action="/comment/{{ question_id }}">
+                        <button type="submit">Comment</button>
+                    </form>
+                </td>
+            {% endif %}
     </tr>
 </table>
 <br/>
 {% if tag %}<p>#{{ tag }}</p>
 </br>
+    {% if username != 'Anonymus' %}
 <td>
-    <form method="get" action="/delete-tag/{{ question_id }}">
-        <button type="submit">Delete tag</button>
-    </form>
+        <form method="get" action="/delete-tag/{{ question_id }}">
+            <button type="submit">Delete tag</button>
+        </form>
 </td>
+    {% endif %}
 {% endif %}
 <p align="center">Show your feelings about the topic:</p>
 <a href="/like/{{ question_id }}">
     <img border="0" alt="Like"
-         src="https://imageog.flaticon.com/icons/png/512/60/60993.png?size=1200x630f&pad=10,10,10,10&ext=png&bg=FFFFFFFF"
+         src="http://clipart.info/images/ccovers/1484772654black-heart-png-clipart-image-free.png"
          height="51">
 </a>
 <a href="/dislike/{{ question_id }}">
@@ -44,47 +52,56 @@
 </p>
 <table style="width:90%" border="0" align="center">
     <tr bgcolor="black" style="color:white">
-        <th>ID</th>
+        <th></th>
+        <th>User</th>
         <th>Answer:</th>
         <th colspan="2">Vote:</th>
         <th>Truth:</th>
+        {% if username != 'Anonymus' %}
         <th></th>
         <th></th>
+        {% endif %}
     </tr>
     {% for answer in answers %}
     <tr>
-        <td bgcolor="black" style="color:white"># {{ answer ['id'] }}</td>
+        <td><img class="prof-pic" src="{{ answer ['user_picture'] }}"></td>
+        <td bgcolor="black" style="color:white"># {{ answer ['username'] }}</td>
         <td align="justify">{{ answer ['message'] }}</td>
-        <td><a href="/answer_like/{{ question_id }}/{{ answer['id'] }}"><img border="0" alt="Like"
-                                                                             src="https://imageog.flaticon.com/icons/png/512/60/60993.png?size=1200x630f&pad=10,10,10,10&ext=png&bg=FFFFFFFF"
+        <td><a href="/answer_like/{{ question_id }}/{{ answer['answer_id'] }}"><img border="0" alt="Like"
+                                                                             src="http://clipart.info/images/ccovers/1484772654black-heart-png-clipart-image-free.png"
                                                                              height="25"></td>
-        <td><a href="/answer_dislike/{{ question_id }}/{{ answer['id'] }}"><img border="0" alt="Hate"
+        <td><a href="/answer_dislike/{{ question_id }}/{{ answer['answer_id'] }}"><img border="0" alt="Hate"
                                                                                 src="http://cliparting.com/wp-content/uploads/2016/11/Heart-black-and-white-broken-heart-clipart-black-and-white-free-image.png"
                                                                                 height="20"></a><br/></td>
         <td>{{ answer ['vote_number'] }}</td>
+        {% if username != 'Anonymus' %}
         <td>
-            <form method="get" action="/answer_edit/{{ question_id }}/{{ answer['id'] }}">
+            <form method="get" action="/answer_edit/{{ question_id }}/{{ answer['answer_id'] }}">
                 <button type="submit">Edit</button>
             </form>
         </td>
         <td>
-            <form method="get" action="/comment_answer/{{ answer['id'] }}">
+            <form method="get" action="/comment_answer/{{ answer['answer_id'] }}">
                 <button type="submit">Comment</button>
             </form>
         </td>
+        {% endif %}
     </tr>
     {% endfor %}
 </table>
 <br/>
-<form action="/question/add_new_answer/{{ question_id }}" , method="POST">
-    <label for="answer">Answer box:</label><br/>
-    <textarea id="answer" , name="answer" required></textarea><br/>
-    <button type="submit">Let it out to the world!</button>
-</form>
+{% if username != 'Anonymus' %}
+    <form action="/question/add_new_answer/{{ question_id }}" , method="POST">
+        <label for="answer">Answer box:</label><br/>
+        <textarea id="answer" , name="answer" required></textarea><br/>
+        <button type="submit">Let it out to the world!</button>
+    </form>
+{% endif %}
 <h4 align="left">
     <form method="get" action="/" align="center">
         <button type="submit">Get Back</button>
     </form>
 </h4>
 </body>
+{% endblock %}
 </html>

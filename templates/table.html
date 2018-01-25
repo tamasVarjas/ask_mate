@@ -23,9 +23,11 @@
     {% endfor %}
 </table>
 <br/>
+{% if username != 'Anonymus' %}
 <form method="get" action="/question/add_new_question">
     <button type="submit">Ask something clever!</button>
 </form>
+{% endif %}
 <br>
 <form align="center">
         <input type="button" value="Get back" onclick="window.location.href='/'" />

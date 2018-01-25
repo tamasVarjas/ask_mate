@@ -18,7 +18,7 @@
 <a href="/table" class="button">Questions</a>
 {% if username != 'Anonymus' %}
     <a href="/question/add_new_question" class="button">New Question</a>
-    <a href="/user-page/" class="button">Your Page</a>
+    <a href="/user-page/{{ id }}" class="button">Your Page</a>
     <a href="/user-list" class="button">Users</a><br/>
 {% else %}
     <a href="/registration" class="button">Registration</a>
