@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+{% extends "layout.html" %}
+{% block content %}
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+    <h2>User's questions:</h2>
+    <table>
+        {% for question in questions %}
+        <tr>
+            <td>{{ question['title'] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <br>
+    <h2>User's answers:</h2>
+    <table>
+        {% for answer in answers %}
+        <tr>
+            <td>{{ answer['message'] }}</td>
+            <td>{{ answer['title'] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <br>
+    <h2>User's comments to questions:</h2>
+    <table>
+        {% for comment in comments %}
+        <tr>
+            <td>{{ comment['comment'] }}</td>
+            <td>{{ comment['title'] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <h2>User's comments to answers:</h2>
+    <table>
+        {% for comment in comments %}
+        <tr>
+            <td>{{ comment['comment'] }}</td>
+            <td>{{ comment['message'] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% endblock %}
+</html>
