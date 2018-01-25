@@ -95,3 +95,13 @@ a.button {
     max-width: 75%;
     height: auto;
 }
+
+.question-link {
+    text-decoration: none;
+    color: black;
+}
+
+.question-link:hover {
+    background-color: darkblue;
+    color: white;
+}
