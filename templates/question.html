@@ -51,7 +51,7 @@
          height="50"></a><br/>
 </p>
 <table style="width:90%" border="0" align="center">
-    <tr bgcolor="black" style="color:white">
+    <tr bgcolor="#133a7e" style="color:white">
         <th></th>
         <th>User</th>
         <th>Answer:</th>
@@ -65,7 +65,7 @@
     {% for answer in answers %}
     <tr>
         <td><img class="prof-pic" src="{{ answer ['user_picture'] }}"></td>
-        <td bgcolor="black" style="color:white"># {{ answer ['username'] }}</td>
+        <td bgcolor="#133a7e" style="color:white"># {{ answer ['username'] }}</td>
         <td align="justify">{{ answer ['message'] }}</td>
         <td><a href="/answer_like/{{ question_id }}/{{ answer['answer_id'] }}"><img border="0" alt="Like"
                                                                              src="http://clipart.info/images/ccovers/1484772654black-heart-png-clipart-image-free.png"
@@ -97,6 +97,7 @@
         <button type="submit">Let it out to the world!</button>
     </form>
 {% endif %}
+
 <h4 align="left">
     <form method="get" action="/" align="center">
         <button type="submit">Get Back</button>

@@ -19,8 +19,22 @@ def index():
 @app.route('/table')
 def table():
     username = session['username'] if 'username' in session else 'Anonymus'
-    info = data_handler.get_all_data('question')
-    return render_template("table.html", info=info, username=username)
+    info = data_handler.get_all_data_for_lapozo('question', 0)
+    how_many_question = len(data_handler.get_all_data('question'))
+    pages = int(how_many_question / 5)
+    return render_template("table.html", info=info, username=username, pages=pages)
+
+
+@app.route('/table/<int:number>')
+def table__for_sites(number):
+    offset_number = ((number -1) * 10)
+    how_many_question = len(data_handler.get_all_data('question'))
+    pages = int(how_many_question / 10)
+    if (how_many_question % 10) != 0:
+        pages = pages + 1
+    username = session['username'] if 'username' in session else 'Anonymus'
+    info = data_handler.get_all_data_for_lapozo('question', offset_number)
+    return render_template("table.html", info=info, username=username, first_pages=offset_number, pages=pages)
 
 
 @app.route('/question/add_new_question', methods=['GET', 'POST'])
@@ -226,8 +240,9 @@ def registration():
         return render_template("user_registration.html")
     else:
         username = request.form['username']
-        is_in_database = data_handler_2.check_name_in_database(username)
-        if is_in_database is None:
+        every_username = data_handler_2.check_name_in_database(username)
+
+        if every_username is None:
             image = request.form['image']
             password = request.form['password']
             hashed_password = data_handler_2.hash_password(password)

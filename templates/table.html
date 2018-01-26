@@ -22,14 +22,25 @@
     </tr>
     {% endfor %}
 </table>
+
+<br>
+
+
+<p class="p_class">-</p>
+{% for table_pages in range(1, pages + 1) %}
+    <p class="p_class"><a class="a_class" href="/table/{{ table_pages }}">{{ table_pages }}</a>
+{% endfor %}
+    </p>
+<p class="p_class">-</p>
+
 <br/>
 {% if username != 'Anonymus' %}
 <form method="get" action="/question/add_new_question">
     <button type="submit">Ask something clever!</button>
 </form>
 {% endif %}
-<br>
-<form align="center">
+
+<br/><form align="left">
         <input type="button" value="Get back" onclick="window.location.href='/'" />
 </form>
 
