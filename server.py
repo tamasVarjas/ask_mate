@@ -240,7 +240,7 @@ def registration():
         return render_template("user_registration.html")
     else:
         username = request.form['username']
-        every_username = data_handler_2.get_all_username(username)
+        every_username = data_handler_2.check_name_in_database(username)
 
         if every_username is None:
             image = request.form['image']
@@ -262,12 +262,12 @@ def log_in():
     else:
         username_check = request.form['username']
         password_check_input = request.form['password']
-        username = data_handler_2.get_all_username(username_check)
+        username = data_handler_2.check_name_in_database(username_check)
 
-        if username != None:
+        if username is not None:
             password_check_database = data_handler_2.get_users_password(username_check)['password']
             verify = data_handler_2.verify_password(password_check_input, password_check_database)
-            if verify == True:
+            if verify is True:
                 username = session['username'] = request.form['username']
                 return render_template('message.html', message='Successful log in as {0}'.format(username), url=url_for('index'))
             else:
