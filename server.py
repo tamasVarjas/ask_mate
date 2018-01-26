@@ -27,7 +27,7 @@ def table():
 
 @app.route('/table/<int:number>')
 def table__for_sites(number):
-    offset_number = ((number -1) * 10)
+    offset_number = ((number - 1) * 10)
     how_many_question = len(data_handler.get_all_data('question'))
     pages = int(how_many_question / 10)
     if (how_many_question % 10) != 0:
@@ -264,17 +264,27 @@ def log_in():
         password_check_input = request.form['password']
         username = data_handler_2.check_name_in_database(username_check)
 
+        template_data = {
+            'message': '',
+            'url': ''
+        }
+
         if username is not None:
             password_check_database = data_handler_2.get_users_password(username_check)['password']
             verify = data_handler_2.verify_password(password_check_input, password_check_database)
             if verify is True:
                 username = session['username'] = request.form['username']
-                return render_template('message.html', message='Successful log in as {0}'.format(username), url=url_for('index'))
+
+                template_data['message'] = 'Successful log in as {0}'.format(username)
+                template_data['url'] = url_for('index')
             else:
-                return render_template('message.html', message='You wrote wrong username or password',
-                                       url=url_for('log_in'))
+                template_data['message'] = 'You wrote wrong username or password'
+                template_data['url'] = url_for('log_in')
         else:
-            return render_template('message.html', message='You wrote wrong username or password', url=url_for('log_in'))
+            template_data['message'] = 'You wrote wrong username or password'
+            template_data['url'] = url_for('log_in')
+
+        return render_template('message.html', **template_data)
 
 
 @app.route('/logout')
@@ -284,6 +294,7 @@ def logout():
     else:
         session.pop('username', None)
         return render_template('message.html', message='Check out is successful', url=url_for('index'))
+
 
 @app.route('/user-page/<int:user_id>')
 def user_page(user_id):

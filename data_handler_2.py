@@ -53,7 +53,7 @@ def get_users_password(cursor, username):
     password = cursor.fetchone()
 
     return password
-  
+
 
 @database_common.connection_handler
 def check_name_in_database(cursor, username):
@@ -61,9 +61,9 @@ def check_name_in_database(cursor, username):
                     SELECT username FROM users
                     WHERE username = %(username)s;
                    """,
-                {'username': username })
+                   {'username': username})
     username_search = cursor.fetchone()
-    
+
     return username_search
 
 
@@ -141,6 +141,7 @@ def get_users_image(cursor, username):
 
     return image
 
+
 @database_common.connection_handler
 def get_id_by_username(cursor, username):
     cursor.execute("""
@@ -151,6 +152,7 @@ def get_id_by_username(cursor, username):
     id = cursor.fetchone()
 
     return id
+
 
 @database_common.connection_handler
 def get_profile_by_question_id(cursor, question_id):
@@ -181,6 +183,7 @@ def get_answer_profile_by_question_id(cursor, question_id):
 
     return profile
 
+
 @database_common.connection_handler
 def get_comment_answer_profile_by_answer_id(cursor, answer_id):
     cursor.execute("""
@@ -194,6 +197,7 @@ def get_comment_answer_profile_by_answer_id(cursor, answer_id):
     profile = cursor.fetchall()
 
     return profile
+
 
 @database_common.connection_handler
 def get_comment_answer_profile_by_question_id(cursor, question_id):
