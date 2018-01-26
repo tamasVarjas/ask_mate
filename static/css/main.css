@@ -75,8 +75,8 @@ a.button {
     display: block;
     margin-left: auto;
     margin-right: auto;
-    width: 50px;
-    height: 50px;
+    width: 100px;
+    height: 100px;
 }
 
 .table_user table {
@@ -102,7 +102,28 @@ a.button {
 }
 
 .question-link:hover {
-    background-color: darkblue;
-    color: white;
+    color: #1f24af;
 }
+
+.a_class:hover {
+    color: #1f24af;
+}
+
+
+.p_class {
+    display: inline-block;
+    color: black;
+    margin-right: 10px;
+    text-decoration: none;
+
+}
+
+.a_class {
+    color: #111113;
+    text-decoration: none;
+    font-style: italic;
+}
+
+
+
 

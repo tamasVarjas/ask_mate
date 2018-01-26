@@ -13,6 +13,18 @@ def get_all_data(cursor, data_table):
     all_data = cursor.fetchall()
     return all_data
 
+@database_common.connection_handler
+def get_all_data_for_lapozo(cursor, data_table, first_pages):
+    cursor.execute("""
+                    SELECT * FROM """ + data_table + """
+                    ORDER BY id
+                    OFFSET %(first_pages)s
+                    LIMIT 10;
+                   """,
+                   {'data_table': data_table, 'first_pages': first_pages})
+    all_data = cursor.fetchall()
+    return all_data
+
 
 @database_common.connection_handler
 def delete_question(cursor, question_id):
