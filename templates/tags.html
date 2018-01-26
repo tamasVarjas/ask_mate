@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+{% extends "layout.html" %}
+{% block content %}
+<head>
+    <meta charset="UTF-8">
+    <title>Tags</title>
+</head>
+    <H1>Tags:</H1>
+    <H2 align="center">You can see all tags and their usage.</H2>
+    <table align="center" width="640px">
+        <thead>
+            <tr>
+                <th>Tag</th>
+                <th>Questions having this tag</th>
+            </tr>
+        </thead>
+    {% for tag in tags %}
+        <tr>
+         <td>{{ tag ['name'] }}</td>
+         <td text align="right">{{ tag ['count'] }}</td>
+        </tr>
+    {% endfor %}
+    </table>
+    <br>
+    <br>
+    <form align="center">
+        <input type="button" value="Get back" onclick="window.location.href='/'" />
+    </form>
+{% endblock %}
+</html>

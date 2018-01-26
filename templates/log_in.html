@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+{% extends "layout.html" %}
+{% block content %}
+<head>
+    <meta charset="UTF-8">
+    <title>Sign In</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/registration.css') }}">
+</head>
+
+    <h1 align="center">Sign In</h1>
+    <p align="center">If you have an account you can log in here, otherwise you can <a href="/registration">register</a>.</p>
+    <form action="/log_in" method="POST">
+    <label><b>Username</b></label>
+    <input type="text" placeholder="Enter Username" name="username" id="username" required>
+
+    <label><b>Password</b></label>
+    <input type="password" placeholder="Enter Password" name="password" id="password" required>
+
+    <label>
+    <input type="checkbox" checked="checked" style="margin-bottom:15px"> Remember me
+    </label><br/>
+    <button type="submit">Sign In</button>
+    <input type="button" value="Cancel" onclick="window.location.href='/'" /></form>
+
+{% endblock %}

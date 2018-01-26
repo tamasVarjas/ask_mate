@@ -5,8 +5,8 @@ body {
     left top;
     background-repeat: no-repeat,
     no-repeat;
-    background-size: 1200px 200px,
-    200px 200px;
+    background-size: 80% 200px,
+    12% auto;
     background-color: #eaebe9;
     color: #111113;
 }
@@ -66,3 +66,64 @@ a.button {
     text-decoration: none;
     color: initial;
 }
+
+#small_button form {
+    display: inline;
+}
+
+.prof-pic {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100px;
+    height: 100px;
+}
+
+.table_user table {
+    table-layout: auto;
+    height: 1.5em;
+    width: 50%;
+    border-collapse: collapse;
+}
+
+.table_user table, th, td {
+    border: 1px solid white;
+    padding: 5px;
+}
+
+#main_img {
+    max-width: 75%;
+    height: auto;
+}
+
+.question-link {
+    text-decoration: none;
+    color: black;
+}
+
+.question-link:hover {
+    color: #1f24af;
+}
+
+.a_class:hover {
+    color: #1f24af;
+}
+
+
+.p_class {
+    display: inline-block;
+    color: black;
+    margin-right: 10px;
+    text-decoration: none;
+
+}
+
+.a_class {
+    color: #111113;
+    text-decoration: none;
+    font-style: italic;
+}
+
+
+
+
